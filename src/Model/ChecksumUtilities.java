@@ -28,10 +28,8 @@ public class ChecksumUtilities {
 
     public byte generateValidChecksum(byte[] bankInput, int startValue, int endValue){
 
-        int dataSize = startValue - endValue;
-
+       int dataSize = startValue - endValue;
        byte[] dataRange =  Arrays.copyOfRange(bankInput, startValue, endValue);
-
        return checksumAlgorithm(dataRange);
     }
 
@@ -40,9 +38,7 @@ public class ChecksumUtilities {
         byte checksum = (byte) (0xFF);
 
         for (byte currentByte : dataRange) {
-
             checksum -= currentByte;
-
         }
 
         return checksum;
