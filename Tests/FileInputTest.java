@@ -1,5 +1,3 @@
-package Tests;
-
 import Model.ChecksumUtilities;
 import Model.FileInput;
 import org.junit.jupiter.api.Test;

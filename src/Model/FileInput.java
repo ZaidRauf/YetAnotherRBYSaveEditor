@@ -19,10 +19,4 @@ public class FileInput {
 
     public byte[] getSaveFileData() { return saveFileData; }
 
-
-
-
-
-
-
 }
