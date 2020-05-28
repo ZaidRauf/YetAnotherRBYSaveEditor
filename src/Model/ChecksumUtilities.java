@@ -26,14 +26,14 @@ public class ChecksumUtilities {
         return false;
     }
 
-    public byte generateValidChecksum(byte[] bankInput, int startValue, int endValue){
+    public static byte generateValidChecksum(byte[] bankInput, int startValue, int endValue){
 
        int dataSize = startValue - endValue;
        byte[] dataRange =  Arrays.copyOfRange(bankInput, startValue, endValue);
        return checksumAlgorithm(dataRange);
     }
 
-    private byte checksumAlgorithm(byte[] dataRange){
+    private static byte checksumAlgorithm(byte[] dataRange){
 
         byte checksum = (byte) (0xFF);
 

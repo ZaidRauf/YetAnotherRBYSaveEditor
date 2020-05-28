@@ -27,14 +27,23 @@ public class Main {
         byte[] testNameArray = CharacterEncodingUtilities.stringToEncodedCharByteArray(testName);
 
 
-        for (int k = 0; k < testNameArray.length; k++){
+        for (byte b : testNameArray) {
 
-            System.out.printf("0x%X ",testNameArray[k]);
+            System.out.printf("0x%X ", b);
 
         }
 
-        generateEditedSaveFile("testOutput.sav", fileInput.getSaveFileData());
+        SaveEditor saveEditor = new SaveEditor();
+
+        saveEditor.setSaveGameData(fileInput.getSaveFileData());
+
+        saveEditor.changePlayerName("ZEDDU");
+
+        saveEditor.updateMainDataChecksum();
+
+        generateEditedSaveFile("testOutput", saveEditor.getSaveGameData());
     }
+
 
 
 }

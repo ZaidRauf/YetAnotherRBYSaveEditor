@@ -51,4 +51,5 @@ public class CharacterEncodingUtilities {
         return characterByteMap.get(character);
     }
 
+
 }
