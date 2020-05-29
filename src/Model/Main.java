@@ -42,6 +42,10 @@ public class Main {
         saveEditor.updateMainDataChecksum();
 
         generateEditedSaveFile("testOutput", saveEditor.getSaveGameData());
+
+        saveEditor.changePlayerMoney(123456);
+
+        saveEditor.numberOfDigits(0);
     }
 
 
