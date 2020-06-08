@@ -22,7 +22,7 @@ public class Main {
 
         System.out.printf("%X\n",checksumTest);
 
-        String testName = "ZED";
+        String testName = "ZED!?";
 
         byte[] testNameArray = CharacterEncodingUtilities.stringToEncodedCharByteArray(testName);
 
@@ -37,7 +37,7 @@ public class Main {
 
         saveEditor.setSaveGameData(fileInput.getSaveFileData());
 
-        saveEditor.changePlayerName("ZEDDU");
+        saveEditor.changePlayerName("Zeddu");
 
         saveEditor.updateMainDataChecksum();
 
@@ -46,6 +46,8 @@ public class Main {
         saveEditor.changePlayerMoney(123456);
 
         saveEditor.numberOfDigits(0);
+
+        int test = 'A' - 'Z';
     }
 
 

@@ -1,5 +1,6 @@
 package Model;
 
+
 public class SaveEditor {
     public static final int PLAYER_NAME = 0x2598;
     public static final int PLAYER_NAME_SIZE = 0xB; //TODO: Check to see if this is needed, if not remove
@@ -12,6 +13,9 @@ public class SaveEditor {
     public void changePlayerMoney(int newMoneyAmount){
         //TODO: throw exception if amount is greater than 999999
         //TODO: Manage case when less than 6 digits are entered
+
+
+        int numberOfMoneyDigits = numberOfDigits(newMoneyAmount);
 
     }
 
@@ -36,7 +40,6 @@ public class SaveEditor {
         saveGameData[ChecksumUtilities.MAIN_DATA_CHECKSUM] = newChecksum;
     }
 
-
     public void setSaveGameData(byte[] saveGameData) {
         this.saveGameData = saveGameData;
     }
@@ -50,9 +53,7 @@ public class SaveEditor {
             return 0;
         }
 
-        int lengthOfNumber = (int) Math.floor(Math.log10(decimalInput) + 1);
-        
-        return lengthOfNumber;
+        return (int) Math.floor(Math.log10(decimalInput) + 1);
     }
 
 }

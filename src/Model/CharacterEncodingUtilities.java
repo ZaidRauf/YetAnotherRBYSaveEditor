@@ -4,34 +4,28 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CharacterEncodingUtilities {
+    private static final byte startUpperCaseLetters = (byte) 0x80;
+    private static final byte startLowerCaseLetters = (byte) 0xA0;
     private static final int PKMN_NULL_TERMINATOR_CHARACTER = 0x50;
-    private static final Map<Character, Byte> characterByteMap = Map.ofEntries(
-            Map.entry('A', (byte) 0x80),
-            Map.entry('B', (byte) 0x81),
-            Map.entry('C', (byte) 0x82),
-            Map.entry('D', (byte) 0x83),
-            Map.entry('E', (byte) 0x84),
-            Map.entry('F', (byte) 0x85),
-            Map.entry('G', (byte) 0x86),
-            Map.entry('H', (byte) 0x87),
-            Map.entry('I', (byte) 0x88),
-            Map.entry('J', (byte) 0x89),
-            Map.entry('K', (byte) 0x8A),
-            Map.entry('L', (byte) 0x8B),
-            Map.entry('M', (byte) 0x8C),
-            Map.entry('N', (byte) 0x8D),
-            Map.entry('O', (byte) 0x8E),
-            Map.entry('P', (byte) 0x8F),
-            Map.entry('Q', (byte) 0x90),
-            Map.entry('R', (byte) 0x91),
-            Map.entry('S', (byte) 0x92),
-            Map.entry('T', (byte) 0x93),
-            Map.entry('U', (byte) 0x94),
-            Map.entry('V', (byte) 0x95),
-            Map.entry('W', (byte) 0x96),
-            Map.entry('X', (byte) 0x97),
-            Map.entry('Y', (byte) 0x98),
-            Map.entry('Z', (byte) 0x99)
+
+    private static final Map<Character, Byte> specialCharacterByteMap = Map.ofEntries(
+            Map.entry('(', (byte) 0x9A),
+            Map.entry(')', (byte) 0x9B),
+            Map.entry(':', (byte) 0x9C),
+            Map.entry(';', (byte) 0x9D),
+            Map.entry('[', (byte) 0x9E),
+            Map.entry(']', (byte) 0x9F),
+            Map.entry('1', (byte) 0xE1), //PK
+            Map.entry('2', (byte) 0xE2), //MN
+            Map.entry('-', (byte) 0xE3),
+            Map.entry('?', (byte) 0xE6),
+            Map.entry('!', (byte) 0xE7),
+            Map.entry('3', (byte) 0xEF), //Male Logo
+            Map.entry('4', (byte) 0xF1), //x
+            Map.entry('.', (byte) 0xF2),
+            Map.entry('/', (byte) 0xF3),
+            Map.entry(',', (byte) 0xF4),
+            Map.entry('5', (byte) 0xF5) //Female Logo
     );
 
     public static byte[] stringToEncodedCharByteArray(String nameString){
@@ -39,7 +33,15 @@ public class CharacterEncodingUtilities {
         byte[] encodedByteArray = new byte[encodedByteArrayLength + 1];
 
         for (int k = 0; k < encodedByteArrayLength; k++){
-            encodedByteArray[k] = charToEncodedByte(nameString.charAt(k));
+            char character = nameString.charAt(k);
+
+            if(Character.isAlphabetic(character)){
+                encodedByteArray[k] = alphaCharToEncodedByte(character);
+            }
+
+            else{
+                encodedByteArray[k] = specialCharToEncodedByte(character);
+            }
         }
 
         encodedByteArray[encodedByteArrayLength] = PKMN_NULL_TERMINATOR_CHARACTER;
@@ -47,8 +49,25 @@ public class CharacterEncodingUtilities {
         return encodedByteArray;
     }
 
-    private static Byte charToEncodedByte(char character){
-        return characterByteMap.get(character);
+    private static Byte alphaCharToEncodedByte(char character){
+        byte charStart;
+        byte characterOffset;
+
+        if(Character.isUpperCase(character)){
+            charStart = startUpperCaseLetters;
+            characterOffset = (byte) (character - 'A');
+        }
+
+        else{
+            charStart = startLowerCaseLetters;
+            characterOffset = (byte) (character - 'a');
+        }
+
+        return (byte) (charStart + characterOffset);
+    }
+
+    private static byte specialCharToEncodedByte(char character){
+        return specialCharacterByteMap.get(character);
     }
 
 
