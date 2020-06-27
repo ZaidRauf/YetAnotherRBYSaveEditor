@@ -1,16 +1,22 @@
 package Model;
 
+import java.util.ArrayList;
+
 public class NumberUtilities {
 
-    public static byte[] splitToBytes(int hexadecimalValue){
-        byte[] byteArray = {0x0,0x0,0x0};
+    public static ArrayList<Byte> splitToBytes(int hexadecimalValue, int partitionNum){
+        ArrayList<Byte> byteArrayList = new ArrayList<>();
 
-        byteArray[2] = (byte) (0x00FF&(hexadecimalValue));
-        byteArray[1] = (byte) (0x00FF&(hexadecimalValue >> 8));
-        byteArray[0] = (byte) (hexadecimalValue >> 16);
+        int byteShiftAmount = 8 * (partitionNum - 1);
 
-        return byteArray;
+        for (int k = 0; k < partitionNum; k++){
+            byteArrayList.add((byte) (0x00FF&(hexadecimalValue >> byteShiftAmount)));
+            byteShiftAmount -= 8;
+        }
+
+        return byteArrayList;
     }
+
 
     public static int decimalToBCD(int inputDecimalValue){
 
@@ -23,7 +29,7 @@ public class NumberUtilities {
 
             kDigit = kDigit << 4 * k;
 
-            hexSum = hexSum|kDigit;
+            hexSum += kDigit;
 
         }
 
@@ -32,7 +38,7 @@ public class NumberUtilities {
 
     private static int numberOfDigits(int decimalInput){
         if (decimalInput == 0){
-            return 0;
+            return 1;
         }
 
         return (int) Math.floor(Math.log10(decimalInput) + 1);

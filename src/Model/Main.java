@@ -46,15 +46,12 @@ public class Main {
 
         System.out.printf("\n\n%X\n",hexSum);
 
-        byte[] arr = NumberUtilities.splitToBytes(hexSum);
-
-        System.out.println(Arrays.toString(arr));
+        ArrayList<Byte> arr = NumberUtilities.splitToBytes(hexSum, 3);
+        System.out.println(arr);
 
         saveEditor.updateMainDataChecksum();
 
         generateEditedSaveFile("testOutput", saveEditor.getSaveGameData());
-
-
 
     }
 
