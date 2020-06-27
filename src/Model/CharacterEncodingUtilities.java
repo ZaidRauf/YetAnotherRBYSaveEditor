@@ -45,7 +45,6 @@ public class CharacterEncodingUtilities {
         }
 
         encodedByteArray[encodedByteArrayLength] = PKMN_NULL_TERMINATOR_CHARACTER;
-
         return encodedByteArray;
     }
 

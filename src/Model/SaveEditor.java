@@ -1,6 +1,5 @@
 package Model;
 
-
 public class SaveEditor {
     public static final int PLAYER_NAME = 0x2598;
     public static final int PLAYER_NAME_SIZE = 0xB; //TODO: Check to see if this is needed, if not remove
@@ -12,10 +11,17 @@ public class SaveEditor {
 
     public void changePlayerMoney(int newMoneyAmount){
         //TODO: throw exception if amount is greater than 999999
-        //TODO: Manage case when less than 6 digits are entered
 
+       int  binaryCodedDecimalInput = NumberUtilities.decimalToBCD(newMoneyAmount);
+       byte[] splitMoneyArray = NumberUtilities.splitToBytes(binaryCodedDecimalInput);
 
-        int numberOfMoneyDigits = numberOfDigits(newMoneyAmount);
+        for (int offset = 0; offset < splitMoneyArray.length; offset++){
+
+            int moneyAddressAndOffset = PLAYER_MONEY + offset;
+
+            saveGameData[moneyAddressAndOffset] = splitMoneyArray[offset];
+
+        }
 
     }
 
@@ -48,12 +54,5 @@ public class SaveEditor {
         return saveGameData;
     }
 
-    public int numberOfDigits(int decimalInput){
-        if (decimalInput == 0){
-            return 0;
-        }
-
-        return (int) Math.floor(Math.log10(decimalInput) + 1);
-    }
 
 }

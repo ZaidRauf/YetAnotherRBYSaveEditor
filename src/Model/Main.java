@@ -13,19 +13,16 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        ChecksumUtilities checksumUtilities = new ChecksumUtilities();
-
         FileInput fileInput = new FileInput();
         fileInput.loadSaveFile("testFile");
 
-        byte checksumTest = checksumUtilities.generateValidChecksum(fileInput.getSaveFileData(), ChecksumUtilities.MAIN_DATA_START, ChecksumUtilities.MAIN_DATA_END);
+        byte checksumTest = ChecksumUtilities.generateValidChecksum(fileInput.getSaveFileData(), ChecksumUtilities.MAIN_DATA_START, ChecksumUtilities.MAIN_DATA_END);
 
         System.out.printf("%X\n",checksumTest);
 
-        String testName = "ZED!?";
+        String testName = "ZED";
 
         byte[] testNameArray = CharacterEncodingUtilities.stringToEncodedCharByteArray(testName);
-
 
         for (byte b : testNameArray) {
 
@@ -37,17 +34,28 @@ public class Main {
 
         saveEditor.setSaveGameData(fileInput.getSaveFileData());
 
-        saveEditor.changePlayerName("Zeddu");
+        saveEditor.changePlayerName("Zed!?");
+
+        saveEditor.changePlayerMoney(123456);
+
+        int test = 'A' - 'Z';
+
+        int test2 = 9;
+
+        int hexSum = NumberUtilities.decimalToBCD(123456);
+
+        System.out.printf("\n\n%X\n",hexSum);
+
+        byte[] arr = NumberUtilities.splitToBytes(hexSum);
+
+        System.out.println(Arrays.toString(arr));
 
         saveEditor.updateMainDataChecksum();
 
         generateEditedSaveFile("testOutput", saveEditor.getSaveGameData());
 
-        saveEditor.changePlayerMoney(123456);
 
-        saveEditor.numberOfDigits(0);
 
-        int test = 'A' - 'Z';
     }
 
 
