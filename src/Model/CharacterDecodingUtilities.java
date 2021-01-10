@@ -25,7 +25,6 @@ public class CharacterDecodingUtilities {
             Map.entry((byte) 0xF2, '.'),
             Map.entry((byte) 0xF3, '/'),
             Map.entry((byte) 0xF4, ','),
-
             Map.entry((byte) 0xF5, '5') //Female Logo
     );
 
