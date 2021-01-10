@@ -9,12 +9,20 @@ public class FileInput {
    public static final int BANK_4_START = 0x6000;
 
    private RandomAccessFile originalSaveFileInputStream = null;
-
+   private FileInput fileInput = null;
    private byte[] saveFileData = null;
+
+   public FileInput FileInput(){
+       if(fileInput == null){
+           fileInput = new FileInput();
+       }
+       return fileInput;
+   }
 
    public void loadSaveFile(String fileName) throws IOException{
        FileInputStream originalSaveFileInputStream = new FileInputStream(fileName);
        saveFileData = originalSaveFileInputStream.readAllBytes();
+
    }
 
     public byte[] getSaveFileData() { return saveFileData; }

@@ -17,7 +17,6 @@ public class NumberUtilities {
         return byteArrayList;
     }
 
-
     public static int decimalToBCD(int inputDecimalValue){
 
         int len = numberOfDigits(inputDecimalValue);

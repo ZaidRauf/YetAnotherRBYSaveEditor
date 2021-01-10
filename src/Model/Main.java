@@ -25,23 +25,17 @@ public class Main {
         byte[] testNameArray = CharacterEncodingUtilities.stringToEncodedCharByteArray(testName);
 
         for (byte b : testNameArray) {
-
             System.out.printf("0x%X ", b);
-
         }
 
         SaveEditor saveEditor = new SaveEditor();
-
         saveEditor.setSaveGameData(fileInput.getSaveFileData());
 
         saveEditor.changePlayerName("Zed!?");
-
         saveEditor.changePlayerMoney(123456);
 
         int test = 'A' - 'Z';
-
         int test2 = 9;
-
         int hexSum = NumberUtilities.decimalToBCD(123456);
 
         System.out.printf("\n\n%X\n",hexSum);
@@ -51,7 +45,7 @@ public class Main {
 
         saveEditor.updateMainDataChecksum();
 
-        generateEditedSaveFile("testOutput", saveEditor.getSaveGameData());
+        generateEditedSaveFile("/Users/zaid/Desktop/", "testOutput", saveEditor.getSaveGameData());
 
     }
 

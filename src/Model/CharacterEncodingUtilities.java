@@ -15,8 +15,8 @@ public class CharacterEncodingUtilities {
             Map.entry(';', (byte) 0x9D),
             Map.entry('[', (byte) 0x9E),
             Map.entry(']', (byte) 0x9F),
-            Map.entry('1', (byte) 0xE1), //PK
-            Map.entry('2', (byte) 0xE2), //MN
+            Map.entry('1', (byte) 0xE1), //Pk
+            Map.entry('2', (byte) 0xE2), //Mn
             Map.entry('-', (byte) 0xE3),
             Map.entry('?', (byte) 0xE6),
             Map.entry('!', (byte) 0xE7),

@@ -3,25 +3,18 @@ package Model;
 import java.util.ArrayList;
 
 public class SaveEditor {
-    public static final int PLAYER_NAME = 0x2598;
-    public static final int PLAYER_NAME_SIZE = 0xB; //TODO: Check to see if this is needed, if not remove
-    public static final int PLAYER_MONEY = 0x25F3;
-    public static final int PLAYER_MONEY_SIZE = 0x3;
-    public static final int PLAYER_GYM_BADGES = 0x2602;
-    public static final int PLAYER_COINS = 0x2850;
-    public static final int PLAYER_COINS_SIZE = 0x2;
 
     private byte[] saveGameData;
 
     public void changePlayerMoney(int newMoneyAmount){
         //TODO: throw exception if amount is greater than 999999
 
-        changePlayerNumericalValue(newMoneyAmount, PLAYER_MONEY, PLAYER_MONEY_SIZE);
+        changePlayerNumericalValue(newMoneyAmount, Player.MONEY, Player.MONEY_SIZE);
 
     }
 
     public void changePlayerGameCornerCoins(int newCoinsAmount){
-        changePlayerNumericalValue(newCoinsAmount, PLAYER_COINS, PLAYER_COINS_SIZE);
+        changePlayerNumericalValue(newCoinsAmount, Player.COINS, Player.COINS_SIZE);
 
     }
 
@@ -41,17 +34,44 @@ public class SaveEditor {
     }
 
     public void changePlayerName(String newPlayerName){
-        byte[] nameByteArray = CharacterEncodingUtilities.stringToEncodedCharByteArray(newPlayerName);
+
+        changePlayerTextValue(newPlayerName, Player.NAME);
+
+    }
+
+    public void changePlayerRivalName(String newRivalName){
+
+        changePlayerTextValue(newRivalName, Player.RIVAL_NAME);
+
+    }
+
+    private void changePlayerTextValue(String newTextString, int address){
+        byte[] newTextByteArray = CharacterEncodingUtilities.stringToEncodedCharByteArray(newTextString);
         //TODO: Throw exception for names longer than 7 characters
         //TODO: Throw exception for invalid characters
-        for (int offset = 0; offset < nameByteArray.length; offset++){
+        for (int offset = 0; offset < newTextByteArray.length; offset++){
 
-            int nameAddressAndOffset = PLAYER_NAME + offset;
+            int nameAddressAndOffset = address + offset;
 
-            saveGameData[nameAddressAndOffset] = nameByteArray[offset];
+            saveGameData[nameAddressAndOffset] = newTextByteArray[offset];
 
         }
     }
+
+    public void changePlayerBadges(byte newBadgeValue){
+        saveGameData[Player.GYM_BADGES] = newBadgeValue;
+        saveGameData[Player.GYM_STATUES] = newBadgeValue;
+    }
+
+    public void changePlayerIDNumber(short newPlayerIDNumber){
+
+        ArrayList<Byte> playerArray = NumberUtilities.splitToBytes(newPlayerIDNumber,Player.ID_SIZE);
+
+        saveGameData[Player.ID] = playerArray.get(0);
+        saveGameData[Player.ID] = playerArray.get(1);
+
+    }
+
 
     public void updateMainDataChecksum(){
         byte newChecksum = ChecksumUtilities.generateValidChecksum(saveGameData,
