@@ -111,7 +111,7 @@ public class StartingWindow {
         JPanel panel = new JPanel();
         SpringLayout panelLayout = new SpringLayout();
         panel.setLayout(panelLayout);
-        panel.setPreferredSize(new Dimension(225,100));
+        panel.setPreferredSize(new Dimension(225,140));
         Border raisedEtched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
         raisedEtched = BorderFactory.createTitledBorder(raisedEtched, "Player Info");
         panel.setBorder(raisedEtched);
@@ -138,9 +138,22 @@ public class StartingWindow {
         JTextField coinsInput = new JTextField(12);
         panel.add(coinsInput);
 
+        JLabel idLabel = new JLabel("ID: ");
+        panel.add(idLabel);
+
+        JTextField idInput = new JTextField(12);
+        panel.add(idInput);
+
+        JLabel rivalLabel = new JLabel("Rival: ");
+        panel.add(rivalLabel);
+
+        JTextField rivalInput = new JTextField(12);
+        panel.add(rivalInput);
+
         panelLayout.putConstraint(SpringLayout.NORTH, nameLabel,3,SpringLayout.NORTH, panel);
         panelLayout.putConstraint(SpringLayout.WEST, nameLabel,3,SpringLayout.NORTH, panel);
 
+        panelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, nameInput,0,SpringLayout.VERTICAL_CENTER, nameLabel);
         panelLayout.putConstraint(SpringLayout.WEST, nameInput,5,SpringLayout.EAST, nameLabel);
 
         panelLayout.putConstraint(SpringLayout.WEST, moneyLabel,3,SpringLayout.NORTH, panel);
@@ -155,6 +168,19 @@ public class StartingWindow {
 
         panelLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, coinsInput, 0, SpringLayout.HORIZONTAL_CENTER, moneyInput);
         panelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, coinsInput, 0, SpringLayout.VERTICAL_CENTER, coinsLabel);
+
+        panelLayout.putConstraint(SpringLayout.WEST, idLabel, 0, SpringLayout.WEST, coinsLabel);
+        panelLayout.putConstraint(SpringLayout.NORTH, idLabel, 7, SpringLayout.SOUTH, coinsLabel);
+
+        panelLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, idInput, 0, SpringLayout.HORIZONTAL_CENTER, moneyInput);
+        panelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, idInput, 0, SpringLayout.VERTICAL_CENTER, idLabel);
+
+        panelLayout.putConstraint(SpringLayout.WEST, rivalLabel, 0, SpringLayout.WEST, idLabel);
+        panelLayout.putConstraint(SpringLayout.NORTH, rivalLabel, 7, SpringLayout.SOUTH, idLabel);
+
+        panelLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, rivalInput, 0, SpringLayout.HORIZONTAL_CENTER, moneyInput);
+        panelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, rivalInput, 0, SpringLayout.VERTICAL_CENTER, rivalLabel);
+
 
         infoPanel = panel;
 
@@ -177,7 +203,6 @@ public class StartingWindow {
 
         final FileDialog filedialog = new java.awt.FileDialog((java.awt.Frame) null);
         final FileDialog saveDialog = new java.awt.FileDialog((java.awt.Frame) null, "Save", FileDialog.SAVE);
-
 
         layout.putConstraint(SpringLayout.WEST, browseButton,3,SpringLayout.WEST, contentPane);
         layout.putConstraint(SpringLayout.SOUTH, browseButton,0,SpringLayout.SOUTH, contentPane);
