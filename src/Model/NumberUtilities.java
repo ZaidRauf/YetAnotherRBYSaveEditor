@@ -35,6 +35,7 @@ public class NumberUtilities {
         return hexSum;
     }
 
+
     private static int numberOfDigits(int decimalInput){
         if (decimalInput == 0){
             return 1;

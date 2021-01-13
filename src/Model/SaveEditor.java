@@ -4,21 +4,21 @@ import java.util.ArrayList;
 
 public class SaveEditor {
 
-    private byte[] saveGameData;
+    private static byte[] saveGameData;
 
-    public void changePlayerMoney(int newMoneyAmount){
+    public static void changePlayerMoney(int newMoneyAmount){
         //TODO: throw exception if amount is greater than 999999
 
         changePlayerNumericalValue(newMoneyAmount, Player.MONEY, Player.MONEY_SIZE);
 
     }
 
-    public void changePlayerGameCornerCoins(int newCoinsAmount){
+    public static void changePlayerGameCornerCoins(int newCoinsAmount){
         changePlayerNumericalValue(newCoinsAmount, Player.COINS, Player.COINS_SIZE);
 
     }
 
-    private void changePlayerNumericalValue(int numericalValue, int address, int partitionNum){
+    private static void changePlayerNumericalValue(int numericalValue, int address, int partitionNum){
 
         int  binaryCodedDecimalInput = NumberUtilities.decimalToBCD(numericalValue);
         ArrayList<Byte> splitArray = NumberUtilities.splitToBytes(binaryCodedDecimalInput, partitionNum);
@@ -33,20 +33,29 @@ public class SaveEditor {
 
     }
 
-    public void changePlayerName(String newPlayerName){
+    public static void changePlayerName(String newPlayerName){
+
+        for(int currentNameByte = Player.NAME; currentNameByte < Player.NAME + Player.NAME_SIZE; currentNameByte++){
+            saveGameData[currentNameByte] = 0x0;
+        }
 
         changePlayerTextValue(newPlayerName, Player.NAME);
 
     }
 
-    public void changePlayerRivalName(String newRivalName){
+    public static void changePlayerRivalName(String newRivalName){
+
+        for(int currentNameByte = Player.RIVAL_NAME; currentNameByte < Player.RIVAL_NAME + Player.NAME_SIZE; currentNameByte++){
+            saveGameData[currentNameByte] = 0x0;
+        }
 
         changePlayerTextValue(newRivalName, Player.RIVAL_NAME);
 
     }
 
-    private void changePlayerTextValue(String newTextString, int address){
+    private static void changePlayerTextValue(String newTextString, int address){
         byte[] newTextByteArray = CharacterEncodingUtilities.stringToEncodedCharByteArray(newTextString);
+
         //TODO: Throw exception for names longer than 7 characters
         //TODO: Throw exception for invalid characters
         for (int offset = 0; offset < newTextByteArray.length; offset++){
@@ -58,12 +67,12 @@ public class SaveEditor {
         }
     }
 
-    public void changePlayerBadges(byte newBadgeValue){
+    public static void changePlayerBadges(byte newBadgeValue){
         saveGameData[Player.GYM_BADGES] = newBadgeValue;
         saveGameData[Player.GYM_STATUES] = newBadgeValue;
     }
 
-    public void changePlayerIDNumber(short newPlayerIDNumber){
+    public static void changePlayerIDNumber(short newPlayerIDNumber){
 
         ArrayList<Byte> playerArray = NumberUtilities.splitToBytes(newPlayerIDNumber,Player.ID_SIZE);
 
@@ -73,7 +82,7 @@ public class SaveEditor {
     }
 
 
-    public void updateMainDataChecksum(){
+    public static void updateMainDataChecksum(){
         byte newChecksum = ChecksumUtilities.generateValidChecksum(saveGameData,
                 ChecksumUtilities.MAIN_DATA_START,
                 ChecksumUtilities.MAIN_DATA_END);
@@ -81,11 +90,11 @@ public class SaveEditor {
         saveGameData[ChecksumUtilities.MAIN_DATA_CHECKSUM] = newChecksum;
     }
 
-    public void setSaveGameData(byte[] saveGameData) {
-        this.saveGameData = saveGameData;
+    public static void setSaveGameData(byte[] newSaveData) {
+        saveGameData = newSaveData;
     }
 
-    public byte[] getSaveGameData() {
+    public static byte[] getSaveGameData() {
         return saveGameData;
     }
 

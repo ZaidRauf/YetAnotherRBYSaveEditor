@@ -14,11 +14,11 @@ public class Player {
     public static final int ID = 0x2605;
     public static final int ID_SIZE = 0x2;
 
-    String playerName;
-    String rivalName;
-    int money;
-    int gymBadges;
-    int coins;
-    short trainerID;
+    public static String playerName;
+    public static String rivalName;
+    public static int money;
+    public static int gymBadges = (byte) 0x0;
+    public static int coins;
+    public static short trainerID;
 
 }

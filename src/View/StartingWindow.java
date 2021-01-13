@@ -1,14 +1,18 @@
 package View;
 
 import Model.FileInput;
+import Model.Player;
 import Model.SaveEditor;
+import Model.SaveReader;
 
-import java.awt.*;
-import java.io.File;
-import java.io.IOException;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
+import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.io.File;
+import java.io.IOException;
 
 import static Model.FileOutput.generateEditedSaveFile;
 
@@ -17,6 +21,9 @@ public class StartingWindow {
    private static Container contentPane = null;
    private static SpringLayout layout = null;
    private static JPanel infoPanel = null;
+   private static JTextField nameField = null;
+   private static JTextField rivalField = null;
+   private static JCheckBox[] checkArray = null;
 
    private static void createPlayerBadgesPanel(){
        JPanel panel = new JPanel();
@@ -40,6 +47,115 @@ public class StartingWindow {
        JCheckBox volcanoCheck = new JCheckBox();
        JCheckBox earthCheck = new JCheckBox();
 
+       boulderCheck.addActionListener(e -> {
+
+           if(boulderCheck.isSelected()) {
+               Player.gymBadges = Player.gymBadges | 0b10000000;
+           }
+
+           else{
+               Player.gymBadges = Player.gymBadges & 0b01111111;
+           }
+           System.out.print("Badge Check: ");
+           System.out.printf("0x%X", Player.gymBadges);
+           System.out.println();
+
+       });
+
+       cascadeCheck.addActionListener(e -> {
+           if(cascadeCheck.isSelected()) {
+               Player.gymBadges = Player.gymBadges | 0b01000000;
+           }
+
+           else{
+               Player.gymBadges = Player.gymBadges & 0b10111111;
+           }
+           System.out.print("Badge Check: ");
+           System.out.printf("0x%X", Player.gymBadges);
+           System.out.println();
+
+       });
+
+       thunderCheck.addActionListener(e -> {
+           if(thunderCheck.isSelected()) {
+               Player.gymBadges = Player.gymBadges | 0b00100000;
+           }
+
+           else{
+               Player.gymBadges = Player.gymBadges & 0b11011111;
+           }
+           System.out.print("Badge Check: ");
+           System.out.printf("0x%X", Player.gymBadges);
+           System.out.println();
+       });
+
+       rainbowCheck.addActionListener(e -> {
+           if(rainbowCheck.isSelected()) {
+               Player.gymBadges = Player.gymBadges | 0b00010000;
+           }
+
+           else{
+               Player.gymBadges = Player.gymBadges & 0b11101111;
+           }
+           System.out.print("Badge Check: ");
+           System.out.printf("0x%X", Player.gymBadges);
+           System.out.println();
+       });
+
+
+       soulCheck.addActionListener(e -> {
+           if(soulCheck.isSelected()) {
+               Player.gymBadges = Player.gymBadges | 0b00001000;
+           }
+
+           else{
+               Player.gymBadges = Player.gymBadges & 0b11110111;
+           }
+           System.out.print("Badge Check: ");
+           System.out.printf("0x%X", Player.gymBadges);
+           System.out.println();
+       });
+
+       marshCheck.addActionListener(e -> {
+           if(marshCheck.isSelected()) {
+               Player.gymBadges = Player.gymBadges | 0b00000100;
+           }
+
+           else{
+               Player.gymBadges = Player.gymBadges & 0b11111011;
+           }
+           System.out.print("Badge Check: ");
+           System.out.printf("0x%X", Player.gymBadges);
+           System.out.println();          });
+
+       volcanoCheck.addActionListener(e -> {
+           if(volcanoCheck.isSelected()) {
+               Player.gymBadges = Player.gymBadges | 0b00000010;
+           }
+
+           else{
+               Player.gymBadges = Player.gymBadges & 0b11111101;
+           }
+           System.out.print("Badge Check: ");
+           System.out.printf("0x%X", Player.gymBadges);
+           System.out.println();
+       });
+
+       earthCheck.addActionListener(e -> {
+           if(earthCheck.isSelected()) {
+               Player.gymBadges = Player.gymBadges | 0b00000001;
+           }
+
+           else{
+               Player.gymBadges = Player.gymBadges & 0b11111110;
+           }
+           System.out.print("Badge Check: ");
+           System.out.printf("0x%X", Player.gymBadges);
+           System.out.println();
+       });
+
+
+
        panel.add(boulderCheck);
        panel.add(cascadeCheck);
        panel.add(thunderCheck);
@@ -57,6 +173,17 @@ public class StartingWindow {
        JLabel marshCheckLabel = new JLabel("Marsh Badge");
        JLabel volcanoCheckLabel = new JLabel("Volcano Badge");
        JLabel earthCheckLabel = new JLabel("Earth Badge");
+
+       checkArray = new JCheckBox[8];
+
+       checkArray[0] = boulderCheck;
+       checkArray[1] = cascadeCheck;
+       checkArray[2] = thunderCheck;
+       checkArray[3] = rainbowCheck;
+       checkArray[4] = soulCheck;
+       checkArray[5] = marshCheck;
+       checkArray[6]= volcanoCheck;
+       checkArray[7] = earthCheck;
 
        panel.add(boulderCheckLabel);
        panel.add(cascadeCheckLabel);
@@ -124,6 +251,7 @@ public class StartingWindow {
         panel.add(nameLabel);
 
         JTextField nameInput = new JTextField(12);
+        nameField = nameInput;
         panel.add(nameInput);
 
         JLabel moneyLabel = new JLabel("Money: ");
@@ -148,7 +276,42 @@ public class StartingWindow {
         panel.add(rivalLabel);
 
         JTextField rivalInput = new JTextField(12);
+        rivalField = rivalInput;
         panel.add(rivalInput);
+
+        nameInput.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                Player.playerName = nameInput.getText();
+            }
+        });
+
+        rivalInput.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                Player.rivalName = rivalInput.getText();
+            }
+        });
+
 
         panelLayout.putConstraint(SpringLayout.NORTH, nameLabel,3,SpringLayout.NORTH, panel);
         panelLayout.putConstraint(SpringLayout.WEST, nameLabel,3,SpringLayout.NORTH, panel);
@@ -211,7 +374,6 @@ public class StartingWindow {
         layout.putConstraint(SpringLayout.SOUTH, saveButton,0,SpringLayout.SOUTH, contentPane);
 
         FileInput fileInput = new FileInput();
-        SaveEditor saveEditor = new SaveEditor();
 
         browseButton.addActionListener(e -> {
             filedialog.setVisible(true);
@@ -221,7 +383,31 @@ public class StartingWindow {
 
                 try {
                     fileInput.loadSaveFile(filedialog.getDirectory() + filedialog.getFile());
-                    saveEditor.setSaveGameData(fileInput.getSaveFileData());
+                    SaveEditor.setSaveGameData(fileInput.getSaveFileData());
+                    SaveReader.setSaveGameData(SaveEditor.getSaveGameData());
+
+                    Player.playerName = SaveReader.readPlayerName();
+                    nameField.setText(Player.playerName);
+
+                    Player.rivalName = SaveReader.readRivalName();
+                    rivalField.setText(Player.rivalName);
+
+                    Player.gymBadges = SaveReader.readBadges();
+
+                    int bitCheck =  0b10000000;
+
+                    for (int i = 0; i < 8; i++){
+                        int result = bitCheck & Player.gymBadges;
+                        result = result >> 7 - i;
+
+                        checkArray[i].setSelected(result == 0x1);
+
+                        System.out.printf("0x%X", result);
+                        System.out.println();
+                        bitCheck = bitCheck >> 1;
+
+                    }
+
                 }
 
                 catch (IOException ioe){
@@ -232,18 +418,23 @@ public class StartingWindow {
 
         saveButton.addActionListener(e -> {
 
+            if(fileInput.getSaveFileData() == null){
+                JOptionPane.showMessageDialog(frame, "No file currently loaded!");
+                return;
+            }
+
             saveDialog.setVisible(true);
 
             if (saveDialog.getDirectory() != null && saveDialog.getFile() != null) {
-                if(fileInput.getSaveFileData() == null){
-                    JOptionPane.showMessageDialog(frame, "No file currently loaded!");
-                    return;
-                }
 
                 System.out.println(saveDialog.getDirectory() + saveDialog.getFile());
 
                 try {
-                    generateEditedSaveFile(saveDialog.getDirectory(), saveDialog.getFile(), saveEditor.getSaveGameData());
+                    SaveEditor.changePlayerName(Player.playerName);
+                    SaveEditor.changePlayerRivalName(Player.rivalName);
+                    SaveEditor.changePlayerBadges((byte) Player.gymBadges);
+
+                    generateEditedSaveFile(saveDialog.getDirectory(), saveDialog.getFile(), SaveEditor.getSaveGameData());
                 } catch (IOException ioe) {
                     JOptionPane.showMessageDialog(frame, "Invalid File: Could not be saved");
                 }

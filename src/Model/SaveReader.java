@@ -1,28 +1,30 @@
 package Model;
 
 public class SaveReader {
-    private byte[] saveGameData;
+    private static byte[] saveGameData;
 
-    public int readPlayerMoney(){
+    public static int readPlayerMoney(){
         return 0;
     }
 
-    public String readPlayerName(){
-        String k = "k";
-        return k;
+    public static String readPlayerName(){
+        return CharacterDecodingUtilities.decodeName(SaveEditor.getSaveGameData(),  Player.NAME);
     }
 
-    public String readRivalName(){
-        String k = "k";
-        return k;
+    public static String readRivalName(){
+       return CharacterDecodingUtilities.decodeName(SaveEditor.getSaveGameData(),  Player.RIVAL_NAME);
+    }
+
+    public static byte readBadges(){
+        return saveGameData[Player.GYM_BADGES];
     }
 
 
-    public void setSaveGameData(byte[] saveGameData) {
-        this.saveGameData = saveGameData;
+    public static void setSaveGameData(byte[] readSaveGameData) {
+        saveGameData = readSaveGameData;
     }
 
-    public byte[] getSaveGameData() {
+    public static byte[] getSaveGameData() {
         return saveGameData;
     }
 

@@ -9,6 +9,7 @@ public class CharacterEncodingUtilities {
     private static final int PKMN_NULL_TERMINATOR_CHARACTER = 0x50;
 
     private static final Map<Character, Byte> specialCharacterByteMap = Map.ofEntries(
+            Map.entry(' ', (byte) 0x7F),
             Map.entry('(', (byte) 0x9A),
             Map.entry(')', (byte) 0x9B),
             Map.entry(':', (byte) 0x9C),

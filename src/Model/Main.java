@@ -15,12 +15,12 @@ public class Main {
 
         FileInput fileInput = new FileInput();
         fileInput.loadSaveFile("testFile");
+//
+//        byte checksumTest = ChecksumUtilities.generateValidChecksum(fileInput.getSaveFileData(), ChecksumUtilities.MAIN_DATA_START, ChecksumUtilities.MAIN_DATA_END);
+//
+//        System.out.printf("%X\n",checksumTest);
 
-        byte checksumTest = ChecksumUtilities.generateValidChecksum(fileInput.getSaveFileData(), ChecksumUtilities.MAIN_DATA_START, ChecksumUtilities.MAIN_DATA_END);
-
-        System.out.printf("%X\n",checksumTest);
-
-        String testName = "ZED";
+        String testName = "AAAA";
 
         byte[] testNameArray = CharacterEncodingUtilities.stringToEncodedCharByteArray(testName);
 
@@ -31,22 +31,30 @@ public class Main {
         SaveEditor saveEditor = new SaveEditor();
         saveEditor.setSaveGameData(fileInput.getSaveFileData());
 
-        saveEditor.changePlayerName("Zed!?");
-        saveEditor.changePlayerMoney(123456);
+        saveEditor.changePlayerName("AAAA");
 
-        int test = 'A' - 'Z';
-        int test2 = 9;
-        int hexSum = NumberUtilities.decimalToBCD(123456);
+        System.out.println("\n");
 
-        System.out.printf("\n\n%X\n",hexSum);
+        System.out.println(CharacterDecodingUtilities.decodeName(saveEditor.getSaveGameData(),  0x2598));
 
-        ArrayList<Byte> arr = NumberUtilities.splitToBytes(hexSum, 3);
-        System.out.println(arr);
+        SaveReader.setSaveGameData(SaveEditor.getSaveGameData());
 
-        saveEditor.updateMainDataChecksum();
+        System.out.printf("0x%X", SaveEditor.getSaveGameData()[Player.GYM_BADGES]);
 
-        generateEditedSaveFile("/Users/zaid/Desktop/", "testOutput", saveEditor.getSaveGameData());
 
+//        saveEditor.changePlayerMoney(123456);
+//
+//        int test = 'A' - 'Z';
+//        int test2 = 9;
+//        int hexSum = NumberUtilities.decimalToBCD(123456);
+//
+//        System.out.printf("\n\n%X\n",hexSum);
+//
+//        ArrayList<Byte> arr = NumberUtilities.splitToBytes(hexSum, 3);
+//        System.out.println(arr);
+//
+//        saveEditor.updateMainDataChecksum();
+//
     }
 
 
