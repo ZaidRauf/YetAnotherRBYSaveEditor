@@ -13,6 +13,8 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
+        System.out.println(NumberUtilities.BCDToDecimal(0x1234));
+
         FileInput fileInput = new FileInput();
         fileInput.loadSaveFile("testFile");
 //
@@ -24,23 +26,27 @@ public class Main {
 
         byte[] testNameArray = CharacterEncodingUtilities.stringToEncodedCharByteArray(testName);
 
-        for (byte b : testNameArray) {
-            System.out.printf("0x%X ", b);
-        }
+//        for (byte b : testNameArray) {
+//            System.out.printf("0x%X ", b);
+//        }
 
         SaveEditor saveEditor = new SaveEditor();
         saveEditor.setSaveGameData(fileInput.getSaveFileData());
 
+        SaveReader.setSaveGameData(fileInput.getSaveFileData());
+        System.out.println(SaveReader.readPlayerNumber(Player.COINS, Player.COINS_SIZE));
+
         saveEditor.changePlayerName("AAAA");
 
         System.out.println("\n");
-
-        System.out.println(CharacterDecodingUtilities.decodeName(saveEditor.getSaveGameData(),  0x2598));
+        int tst = SaveEditor.getSaveGameData()[0x25F3];
+        System.out.println(Integer.toBinaryString(tst & 0x000000FF)); // 1001 1000
+        System.out.println(0x98);
+//        System.out.println(CharacterDecodingUtilities.decodeName(saveEditor.getSaveGameData(),  0x2598));
 
         SaveReader.setSaveGameData(SaveEditor.getSaveGameData());
 
-        System.out.printf("0x%X", SaveEditor.getSaveGameData()[Player.GYM_BADGES]);
-
+//        System.out.printf("0x%X", SaveEditor.getSaveGameData()[Player.GYM_BADGES]);
 
 //        saveEditor.changePlayerMoney(123456);
 //

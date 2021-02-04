@@ -18,6 +18,16 @@ public class SaveEditor {
 
     }
 
+    public static void changePlayerID(int newCoinsAmount){
+        int upperHalf =  newCoinsAmount & 0xFF00;
+        upperHalf = upperHalf >> 8;
+
+        int lowerHalf =  newCoinsAmount & 0x00FF;
+
+        saveGameData[Player.ID] = (byte) upperHalf;
+        saveGameData[Player.ID + 1] = (byte) lowerHalf;
+    }
+
     private static void changePlayerNumericalValue(int numericalValue, int address, int partitionNum){
 
         int  binaryCodedDecimalInput = NumberUtilities.decimalToBCD(numericalValue);

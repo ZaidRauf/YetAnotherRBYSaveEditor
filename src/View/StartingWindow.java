@@ -23,6 +23,9 @@ public class StartingWindow {
    private static JPanel infoPanel = null;
    private static JTextField nameField = null;
    private static JTextField rivalField = null;
+   private static JTextField moneyField = null;
+   private static JTextField coinsField = null;
+   private static JTextField idField = null;
    private static JCheckBox[] checkArray = null;
 
    private static void createPlayerBadgesPanel(){
@@ -195,14 +198,16 @@ public class StartingWindow {
        panel.add(earthCheckLabel);
 
        panelLayout.putConstraint(SpringLayout.WEST, volcanoCheck, 8, SpringLayout.EAST, volcanoCheckLabel);
-       panelLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, boulderCheck, 0, SpringLayout.HORIZONTAL_CENTER, volcanoCheck);
-       panelLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, thunderCheck, 0, SpringLayout.HORIZONTAL_CENTER, volcanoCheck);
-       panelLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, rainbowCheck, 0, SpringLayout.HORIZONTAL_CENTER, volcanoCheck);
-       panelLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, soulCheck, 0, SpringLayout.HORIZONTAL_CENTER, volcanoCheck);
-       panelLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, marshCheck, 0, SpringLayout.HORIZONTAL_CENTER, volcanoCheck);
-       panelLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, cascadeCheck, 0, SpringLayout.HORIZONTAL_CENTER, volcanoCheck);
-       panelLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, earthCheck, 0, SpringLayout.HORIZONTAL_CENTER, volcanoCheck);
 
+       for(JCheckBox badgeCheck: checkArray){
+           if (badgeCheck == checkArray[6]){
+               continue;
+           }
+
+           panelLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, badgeCheck, 0, SpringLayout.HORIZONTAL_CENTER, volcanoCheck);
+       }
+
+       panelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, volcanoCheck, 0, SpringLayout.VERTICAL_CENTER, volcanoCheckLabel);
        panelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, boulderCheck, 0, SpringLayout.VERTICAL_CENTER, boulderCheckLabel);
        panelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, cascadeCheck, 0, SpringLayout.VERTICAL_CENTER, cascadeCheckLabel);
        panelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, thunderCheck, 0, SpringLayout.VERTICAL_CENTER, thunderCheckLabel);
@@ -210,8 +215,8 @@ public class StartingWindow {
        panelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, soulCheck, 0, SpringLayout.VERTICAL_CENTER, soulCheckLabel);
        panelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, marshCheck, 0, SpringLayout.VERTICAL_CENTER, marshCheckLabel);
        panelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, marshCheck, 0, SpringLayout.VERTICAL_CENTER, marshCheckLabel);
-       panelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, volcanoCheck, 0, SpringLayout.VERTICAL_CENTER, volcanoCheckLabel);
        panelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, earthCheck, 0, SpringLayout.VERTICAL_CENTER, earthCheckLabel);
+
 
        panelLayout.putConstraint(SpringLayout.WEST, boulderCheckLabel, 5, SpringLayout.WEST, panel);
        panelLayout.putConstraint(SpringLayout.WEST, cascadeCheckLabel, 0, SpringLayout.WEST, boulderCheckLabel);
@@ -258,18 +263,21 @@ public class StartingWindow {
         panel.add(moneyLabel);
 
         JTextField moneyInput = new JTextField(12);
+        moneyField = moneyInput;
         panel.add(moneyInput);
 
         JLabel coinsLabel = new JLabel("Coins: ");
         panel.add(coinsLabel);
 
         JTextField coinsInput = new JTextField(12);
+        coinsField = coinsInput;
         panel.add(coinsInput);
 
         JLabel idLabel = new JLabel("ID: ");
         panel.add(idLabel);
 
         JTextField idInput = new JTextField(12);
+        idField = idInput;
         panel.add(idInput);
 
         JLabel rivalLabel = new JLabel("Rival: ");
@@ -311,6 +319,56 @@ public class StartingWindow {
                 Player.rivalName = rivalInput.getText();
             }
         });
+
+        moneyInput.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                Player.money = Integer.parseInt(moneyInput.getText());
+            }
+        });
+
+        coinsInput.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                Player.coins = Integer.parseInt(coinsInput.getText());
+            }
+        });
+
+        idInput.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                Player.trainerID = Integer.parseInt(idInput.getText());
+            }
+        });
+
 
 
         panelLayout.putConstraint(SpringLayout.NORTH, nameLabel,3,SpringLayout.NORTH, panel);
@@ -408,6 +466,16 @@ public class StartingWindow {
 
                     }
 
+                    Player.money = SaveReader.readPlayerMoney();
+                    moneyField.setText(Integer.toString(Player.money));
+
+                    Player.coins = SaveReader.readPlayerCoins();
+                    coinsField.setText(Integer.toString(Player.coins));
+
+                    Player.trainerID = SaveReader.readPlayerID();
+                    idField.setText(SaveReader.readPlayerIDStr());
+
+
                 }
 
                 catch (IOException ioe){
@@ -433,6 +501,11 @@ public class StartingWindow {
                     SaveEditor.changePlayerName(Player.playerName);
                     SaveEditor.changePlayerRivalName(Player.rivalName);
                     SaveEditor.changePlayerBadges((byte) Player.gymBadges);
+                    SaveEditor.changePlayerMoney(Player.money);
+                    SaveEditor.changePlayerMoney(Player.money);
+                    SaveEditor.changePlayerGameCornerCoins(Player.coins);
+                    SaveEditor.changePlayerID(Player.trainerID);
+                    SaveEditor.updateMainDataChecksum();
 
                     generateEditedSaveFile(saveDialog.getDirectory(), saveDialog.getFile(), SaveEditor.getSaveGameData());
                 } catch (IOException ioe) {

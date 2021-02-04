@@ -10,7 +10,7 @@ public class NumberUtilities {
         int byteShiftAmount = 8 * (partitionNum - 1);
 
         for (int k = 0; k < partitionNum; k++){
-            byteArrayList.add((byte) (0x00FF&(hexadecimalValue >> byteShiftAmount)));
+            byteArrayList.add((byte) (0x00FF & (hexadecimalValue >> byteShiftAmount)));
             byteShiftAmount -= 8;
         }
 
@@ -19,7 +19,7 @@ public class NumberUtilities {
 
     public static int decimalToBCD(int inputDecimalValue){
 
-        int len = numberOfDigits(inputDecimalValue);
+        int len = numberOfDecimalDigits(inputDecimalValue);
         int hexSum = 0;
 
         for(int k = 0; k < len; k++){
@@ -35,8 +35,33 @@ public class NumberUtilities {
         return hexSum;
     }
 
+    public static int BCDToDecimal(int inputBCDValue){
+        int hexLength = numberOfHexDigits(inputBCDValue);
+        int bcdSum = 0;
+        int bcdMultiple = 1;
 
-    private static int numberOfDigits(int decimalInput){
+       for(int k = 0; k < hexLength; k++){
+
+           int hexByte = inputBCDValue >> 4 * k;
+           hexByte = hexByte & 0xF;
+           bcdSum += hexByte * bcdMultiple;
+           bcdMultiple = 10 * bcdMultiple;
+
+       }
+
+        return bcdSum;
+    }
+
+
+    private static int numberOfHexDigits(int hexInput){
+        if (hexInput == 0){
+            return 1;
+        }
+
+        return (int) Math.floor((Math.log(hexInput)/Math.log(16)) + 1);
+    }
+
+    public static int numberOfDecimalDigits(int decimalInput){
         if (decimalInput == 0){
             return 1;
         }

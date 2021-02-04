@@ -16,9 +16,9 @@ public class Player {
 
     public static String playerName;
     public static String rivalName;
-    public static int money;
+    public static int money = 0;
     public static int gymBadges = (byte) 0x0;
-    public static int coins;
-    public static short trainerID;
+    public static int coins = 0;
+    public static int trainerID = 0;
 
 }
