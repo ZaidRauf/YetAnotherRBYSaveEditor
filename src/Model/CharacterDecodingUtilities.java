@@ -63,7 +63,6 @@ public class CharacterDecodingUtilities {
             charInt = characterOffset + 'A';
             decodedChar = (char) charInt;
             return decodedChar;
-
         }
 
         else if(encodedByte >= startLowerCaseLetters && encodedByte <= endLowerCaseLetters){

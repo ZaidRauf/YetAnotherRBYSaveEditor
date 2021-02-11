@@ -11,6 +11,7 @@ import javax.swing.border.EtchedBorder;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.geom.Line2D;
 import java.io.File;
 import java.io.IOException;
 
@@ -21,6 +22,9 @@ public class StartingWindow {
    private static Container contentPane = null;
    private static SpringLayout layout = null;
    private static JPanel infoPanel = null;
+   private static JPanel editorPanel = null;
+   private static JPanel browserPanel = null;
+   private static JPanel badgesPanel = null;
    private static JTextField nameField = null;
    private static JTextField rivalField = null;
    private static JTextField moneyField = null;
@@ -30,9 +34,10 @@ public class StartingWindow {
 
    private static void createPlayerBadgesPanel(){
        JPanel panel = new JPanel();
+       badgesPanel = panel;
        SpringLayout panelLayout = new SpringLayout();
        panel.setLayout(panelLayout);
-       panel.setPreferredSize(new Dimension(150,200));
+       panel.setPreferredSize(new Dimension(160,210));
        Border raisedEtched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
        raisedEtched = BorderFactory.createTitledBorder(raisedEtched, "Badges");
        panel.setBorder(raisedEtched);
@@ -52,111 +57,39 @@ public class StartingWindow {
 
        boulderCheck.addActionListener(e -> {
 
-           if(boulderCheck.isSelected()) {
-               Player.gymBadges = Player.gymBadges | 0b10000000;
-           }
-
-           else{
-               Player.gymBadges = Player.gymBadges & 0b01111111;
-           }
-           System.out.print("Badge Check: ");
-           System.out.printf("0x%X", Player.gymBadges);
-           System.out.println();
+           updateBadgeValue(boulderCheck, 0);
 
        });
 
        cascadeCheck.addActionListener(e -> {
-           if(cascadeCheck.isSelected()) {
-               Player.gymBadges = Player.gymBadges | 0b01000000;
-           }
-
-           else{
-               Player.gymBadges = Player.gymBadges & 0b10111111;
-           }
-           System.out.print("Badge Check: ");
-           System.out.printf("0x%X", Player.gymBadges);
-           System.out.println();
-
+           updateBadgeValue(cascadeCheck, 1);
        });
 
        thunderCheck.addActionListener(e -> {
-           if(thunderCheck.isSelected()) {
-               Player.gymBadges = Player.gymBadges | 0b00100000;
-           }
-
-           else{
-               Player.gymBadges = Player.gymBadges & 0b11011111;
-           }
-           System.out.print("Badge Check: ");
-           System.out.printf("0x%X", Player.gymBadges);
-           System.out.println();
+           updateBadgeValue(thunderCheck, 2);
        });
 
        rainbowCheck.addActionListener(e -> {
-           if(rainbowCheck.isSelected()) {
-               Player.gymBadges = Player.gymBadges | 0b00010000;
-           }
+           updateBadgeValue(rainbowCheck, 3);
 
-           else{
-               Player.gymBadges = Player.gymBadges & 0b11101111;
-           }
-           System.out.print("Badge Check: ");
-           System.out.printf("0x%X", Player.gymBadges);
-           System.out.println();
        });
 
 
        soulCheck.addActionListener(e -> {
-           if(soulCheck.isSelected()) {
-               Player.gymBadges = Player.gymBadges | 0b00001000;
-           }
-
-           else{
-               Player.gymBadges = Player.gymBadges & 0b11110111;
-           }
-           System.out.print("Badge Check: ");
-           System.out.printf("0x%X", Player.gymBadges);
-           System.out.println();
+           updateBadgeValue(soulCheck, 4);
        });
 
        marshCheck.addActionListener(e -> {
-           if(marshCheck.isSelected()) {
-               Player.gymBadges = Player.gymBadges | 0b00000100;
-           }
-
-           else{
-               Player.gymBadges = Player.gymBadges & 0b11111011;
-           }
-           System.out.print("Badge Check: ");
-           System.out.printf("0x%X", Player.gymBadges);
-           System.out.println();          });
+           updateBadgeValue(marshCheck, 5);
+       });
 
        volcanoCheck.addActionListener(e -> {
-           if(volcanoCheck.isSelected()) {
-               Player.gymBadges = Player.gymBadges | 0b00000010;
-           }
-
-           else{
-               Player.gymBadges = Player.gymBadges & 0b11111101;
-           }
-           System.out.print("Badge Check: ");
-           System.out.printf("0x%X", Player.gymBadges);
-           System.out.println();
+           updateBadgeValue(volcanoCheck, 6);
        });
 
        earthCheck.addActionListener(e -> {
-           if(earthCheck.isSelected()) {
-               Player.gymBadges = Player.gymBadges | 0b00000001;
-           }
-
-           else{
-               Player.gymBadges = Player.gymBadges & 0b11111110;
-           }
-           System.out.print("Badge Check: ");
-           System.out.printf("0x%X", Player.gymBadges);
-           System.out.println();
+           updateBadgeValue(earthCheck, 7);
        });
-
 
 
        panel.add(boulderCheck);
@@ -197,7 +130,7 @@ public class StartingWindow {
        panel.add(volcanoCheckLabel);
        panel.add(earthCheckLabel);
 
-       panelLayout.putConstraint(SpringLayout.WEST, volcanoCheck, 8, SpringLayout.EAST, volcanoCheckLabel);
+       panelLayout.putConstraint(SpringLayout.WEST, volcanoCheck, 23, SpringLayout.EAST, volcanoCheckLabel);
 
        for(JCheckBox badgeCheck: checkArray){
            if (badgeCheck == checkArray[6]){
@@ -229,21 +162,65 @@ public class StartingWindow {
 
 
        panelLayout.putConstraint(SpringLayout.NORTH, boulderCheckLabel, 5, SpringLayout.NORTH, panel);
-       panelLayout.putConstraint(SpringLayout.NORTH, cascadeCheckLabel, 5, SpringLayout.SOUTH, boulderCheckLabel);
-       panelLayout.putConstraint(SpringLayout.NORTH, thunderCheckLabel, 5, SpringLayout.SOUTH, cascadeCheckLabel);
-       panelLayout.putConstraint(SpringLayout.NORTH, rainbowCheckLabel, 5, SpringLayout.SOUTH, thunderCheckLabel);
-       panelLayout.putConstraint(SpringLayout.NORTH, soulCheckLabel, 5, SpringLayout.SOUTH, rainbowCheckLabel);
-       panelLayout.putConstraint(SpringLayout.NORTH, marshCheckLabel, 5, SpringLayout.SOUTH, soulCheckLabel);
-       panelLayout.putConstraint(SpringLayout.NORTH, volcanoCheckLabel, 5, SpringLayout.SOUTH, marshCheckLabel);
-       panelLayout.putConstraint(SpringLayout.NORTH, earthCheckLabel, 5, SpringLayout.SOUTH, volcanoCheckLabel);
+       panelLayout.putConstraint(SpringLayout.NORTH, cascadeCheckLabel, 7, SpringLayout.SOUTH, boulderCheckLabel);
+       panelLayout.putConstraint(SpringLayout.NORTH, thunderCheckLabel, 7, SpringLayout.SOUTH, cascadeCheckLabel);
+       panelLayout.putConstraint(SpringLayout.NORTH, rainbowCheckLabel, 7, SpringLayout.SOUTH, thunderCheckLabel);
+       panelLayout.putConstraint(SpringLayout.NORTH, soulCheckLabel, 7, SpringLayout.SOUTH, rainbowCheckLabel);
+       panelLayout.putConstraint(SpringLayout.NORTH, marshCheckLabel, 7, SpringLayout.SOUTH, soulCheckLabel);
+       panelLayout.putConstraint(SpringLayout.NORTH, volcanoCheckLabel, 7, SpringLayout.SOUTH, marshCheckLabel);
+       panelLayout.putConstraint(SpringLayout.NORTH, earthCheckLabel, 7, SpringLayout.SOUTH, volcanoCheckLabel);
 
    }
+
+   private static void pokemonEditorPanel(){
+       JPanel panel = new JPanel();
+       editorPanel = panel;
+       SpringLayout panelLayout = new SpringLayout();
+       panel.setLayout(panelLayout);
+       panel.setPreferredSize(new Dimension(255,140));
+       Border raisedEtched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
+       raisedEtched = BorderFactory.createTitledBorder(raisedEtched, "PokéEditor");
+       panel.setBorder(raisedEtched);
+       contentPane.add(panel);
+
+       layout.putConstraint(SpringLayout.WEST, panel, 5, SpringLayout.EAST, infoPanel);
+       layout.putConstraint(SpringLayout.NORTH, panel, 5, SpringLayout.NORTH, contentPane);
+   }
+
+    private static void pokemonBrowserPanel(){
+        JPanel panel = new JPanel();
+        browserPanel = panel;
+        SpringLayout panelLayout = new SpringLayout();
+        panel.setLayout(panelLayout);
+        panel.setPreferredSize(new Dimension(255,75));
+        Border raisedEtched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
+        raisedEtched = BorderFactory.createTitledBorder(raisedEtched, "PokéBrowser");
+        panel.setBorder(raisedEtched);
+        contentPane.add(panel);
+
+        layout.putConstraint(SpringLayout.WEST, panel, 5, SpringLayout.EAST, badgesPanel);
+        layout.putConstraint(SpringLayout.NORTH, panel, 5, SpringLayout.SOUTH, editorPanel);
+    }
+
+    private static void itemEditorPanel(){
+        JPanel panel = new JPanel();
+        SpringLayout panelLayout = new SpringLayout();
+        panel.setLayout(panelLayout);
+        panel.setPreferredSize(new Dimension(255,130));
+        Border raisedEtched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
+        raisedEtched = BorderFactory.createTitledBorder(raisedEtched, "Item Editor");
+        panel.setBorder(raisedEtched);
+        contentPane.add(panel);
+
+        layout.putConstraint(SpringLayout.WEST, panel, 5, SpringLayout.EAST, badgesPanel);
+        layout.putConstraint(SpringLayout.NORTH, panel, 5, SpringLayout.SOUTH, browserPanel);
+    }
 
     private static void createPlayerInfoPanel(){
         JPanel panel = new JPanel();
         SpringLayout panelLayout = new SpringLayout();
         panel.setLayout(panelLayout);
-        panel.setPreferredSize(new Dimension(225,140));
+        panel.setPreferredSize(new Dimension(160,140));
         Border raisedEtched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
         raisedEtched = BorderFactory.createTitledBorder(raisedEtched, "Player Info");
         panel.setBorder(raisedEtched);
@@ -255,35 +232,35 @@ public class StartingWindow {
         JLabel nameLabel = new JLabel("Name: ");
         panel.add(nameLabel);
 
-        JTextField nameInput = new JTextField(12);
+        JTextField nameInput = new JTextField(7);
         nameField = nameInput;
         panel.add(nameInput);
 
         JLabel moneyLabel = new JLabel("Money: ");
         panel.add(moneyLabel);
 
-        JTextField moneyInput = new JTextField(12);
+        JTextField moneyInput = new JTextField(7);
         moneyField = moneyInput;
         panel.add(moneyInput);
 
         JLabel coinsLabel = new JLabel("Coins: ");
         panel.add(coinsLabel);
 
-        JTextField coinsInput = new JTextField(12);
+        JTextField coinsInput = new JTextField(7);
         coinsField = coinsInput;
         panel.add(coinsInput);
 
         JLabel idLabel = new JLabel("ID: ");
         panel.add(idLabel);
 
-        JTextField idInput = new JTextField(12);
+        JTextField idInput = new JTextField(7);
         idField = idInput;
         panel.add(idInput);
 
         JLabel rivalLabel = new JLabel("Rival: ");
         panel.add(rivalLabel);
 
-        JTextField rivalInput = new JTextField(12);
+        JTextField rivalInput = new JTextField(7);
         rivalField = rivalInput;
         panel.add(rivalInput);
 
@@ -410,7 +387,7 @@ public class StartingWindow {
     private static void createAndShowGUI() {
         JFrame frame = new JFrame("Yet Another RBY Editor");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setPreferredSize(new Dimension(750,512));
+        frame.setPreferredSize(new Dimension(440,430));
 
         contentPane = frame.getContentPane();
         layout = new SpringLayout();
@@ -452,17 +429,17 @@ public class StartingWindow {
 
                     Player.gymBadges = SaveReader.readBadges();
 
-                    int bitCheck =  0b10000000;
+                    int bitCheck =  0b00000001;
 
                     for (int i = 0; i < 8; i++){
                         int result = bitCheck & Player.gymBadges;
-                        result = result >> 7 - i;
+                        result = result >> i;
 
                         checkArray[i].setSelected(result == 0x1);
 
                         System.out.printf("0x%X", result);
                         System.out.println();
-                        bitCheck = bitCheck >> 1;
+                        bitCheck = bitCheck << 1;
 
                     }
 
@@ -516,6 +493,9 @@ public class StartingWindow {
 
         createPlayerInfoPanel();
         createPlayerBadgesPanel();
+        pokemonEditorPanel();
+        pokemonBrowserPanel();
+        itemEditorPanel();
 
         frame.pack();
         frame.setVisible(true);
@@ -524,4 +504,22 @@ public class StartingWindow {
     public static void main(String[] args) {
         createAndShowGUI();
     }
+
+    private static void updateBadgeValue(JCheckBox badgeCheck, int badgeNum ){
+       int checkMask = 0b00000001 << badgeNum;
+       int uncheckMask = ~checkMask;
+
+        if(badgeCheck.isSelected()) {
+            Player.gymBadges = Player.gymBadges | checkMask;
+        }
+
+        else{
+            Player.gymBadges = Player.gymBadges & uncheckMask;
+        }
+        System.out.print("Badge Check: ");
+        System.out.printf("0x%X", Player.gymBadges);
+        System.out.println();
+    }
+
+
 }

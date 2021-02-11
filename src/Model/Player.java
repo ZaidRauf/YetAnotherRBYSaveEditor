@@ -1,5 +1,7 @@
 package Model;
 
+import java.util.ArrayList;
+
 public class Player {
     public static final int NAME = 0x2598;
     public static final int RIVAL_NAME = 0x25F6;
@@ -20,5 +22,7 @@ public class Player {
     public static int gymBadges = (byte) 0x0;
     public static int coins = 0;
     public static int trainerID = 0;
+
+    public static ArrayList<Item> bagItemList = new ArrayList(20);
 
 }
