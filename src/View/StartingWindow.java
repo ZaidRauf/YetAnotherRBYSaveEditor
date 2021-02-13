@@ -11,10 +11,13 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.event.ListDataListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.text.NumberFormatter;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
@@ -29,8 +32,9 @@ public class StartingWindow {
    private static Container contentPane = null;
    private static SpringLayout layout = null;
    private static JPanel infoPanel = null;
-   private static JPanel editorPanel = null;
-   private static JPanel browserPanel = null;
+   private static JPanel pokeEditorPanel = null;
+    private static JPanel itemEditorPanel = null;
+    private static JPanel browserPanel = null;
    private static JPanel badgesPanel = null;
    private static JTextField nameField = null;
    private static JTextField rivalField = null;
@@ -39,6 +43,7 @@ public class StartingWindow {
    private static JTextField idField = null;
    private static JCheckBox[] checkArray = null;
    private static DefaultListModel<String> itemModel = null;
+   private static JFormattedTextField itemAmountField = null;
 
    private static void createPlayerBadgesPanel(){
        JPanel panel = new JPanel();
@@ -182,7 +187,7 @@ public class StartingWindow {
 
    private static void pokemonEditorPanel(){
        JPanel panel = new JPanel();
-       editorPanel = panel;
+       pokeEditorPanel = panel;
        SpringLayout panelLayout = new SpringLayout();
        panel.setLayout(panelLayout);
        panel.setPreferredSize(new Dimension(330,210));
@@ -207,11 +212,12 @@ public class StartingWindow {
         contentPane.add(panel);
 
         layout.putConstraint(SpringLayout.WEST, panel, 5, SpringLayout.EAST, badgesPanel);
-        layout.putConstraint(SpringLayout.NORTH, panel, 5, SpringLayout.SOUTH, editorPanel);
+        layout.putConstraint(SpringLayout.NORTH, panel, 5, SpringLayout.SOUTH, itemEditorPanel);
     }
 
     private static void itemEditorPanel(){
         JPanel panel = new JPanel();
+        itemEditorPanel = itemEditorPanel;
         SpringLayout panelLayout = new SpringLayout();
         panel.setLayout(panelLayout);
         panel.setPreferredSize(new Dimension(330,140));
@@ -224,15 +230,6 @@ public class StartingWindow {
         JList<String> itemList = new JList<>( model );
         itemList.setSelectionMode(SINGLE_SELECTION);
         itemList.setLayoutOrientation(JList.VERTICAL);
-        itemList.addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                if (!e.getValueIsAdjusting()) {//This line prevents double events
-                    System.out.println(itemList.getSelectedIndex());
-                }
-            }
-
-        });
 
         JScrollPane scroller = new JScrollPane(itemList, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scroller.setPreferredSize(new Dimension(90,80));
@@ -267,6 +264,43 @@ public class StartingWindow {
         panelLayout.putConstraint(SpringLayout.NORTH, amountLabel, 10, SpringLayout.SOUTH, itemLabel);
         panelLayout.putConstraint(SpringLayout.WEST, amountLabel, 0, SpringLayout.WEST, itemLabel);
 
+        NumberFormatter amountFormat = new NumberFormatter(NumberFormat.getIntegerInstance());
+        amountFormat.setMinimum(1);
+        amountFormat.setMaximum(99);
+//        amountFormat.setAllowsInvalid(false);
+        JFormattedTextField itemAmountInput = new JFormattedTextField(amountFormat);
+        itemAmountInput.setColumns(2);
+        panel.add(itemAmountInput);
+        panelLayout.putConstraint(SpringLayout.WEST, itemAmountInput, 5, SpringLayout.EAST, amountLabel);
+        panelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, itemAmountInput, 2, SpringLayout.VERTICAL_CENTER, amountLabel);
+        itemAmountField = itemAmountInput;
+
+        itemAmountInput.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                try {
+                    if (itemList.getSelectedIndex() != -1 && !itemAmountInput.getText().equals("") && Integer.parseInt(itemAmountInput.getText()) > 0) {
+                        SaveEditor.changeBagAmount(itemList.getSelectedIndex(), Integer.parseInt(itemAmountInput.getText()));
+                    }
+                }
+                catch (NumberFormatException nfe){
+
+                    //don't change value
+
+                }
+            }
+        });
+
         JLabel countLabel = new JLabel("Capacity: ");
         panel.add(countLabel);
         panelLayout.putConstraint(SpringLayout.NORTH, countLabel, 10, SpringLayout.SOUTH, amountLabel);
@@ -286,21 +320,77 @@ public class StartingWindow {
         panelLayout.putConstraint(SpringLayout.NORTH, removeButton, 5, SpringLayout.SOUTH, addButton);
         panelLayout.putConstraint(SpringLayout.WEST, removeButton, 0, SpringLayout.EAST, scroller);
 
+        removeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(itemList.getSelectedIndex() != -1) {
+                    int currIdx = itemList.getSelectedIndex();
+
+                    SaveEditor.removeBagItem(itemList.getSelectedIndex());
+                    model.removeElementAt(itemList.getSelectedIndex());
+                    itemAmountInput.setText("");
+
+                    if(model.size() != 0 && currIdx != 0){
+                        itemList.setSelectedIndex(currIdx-1);
+                        itemAmountInput.setText("" + SaveReader.readBagItemAmount(itemList.getSelectedIndex()));
+                    }
+                }
+
+                else if(model.size() > 0 && itemList.getSelectedIndex() == -1){
+                    SaveEditor.removeBagItem(model.size() - 1);
+                    model.removeElementAt(model.size() - 1);
+                    itemAmountInput.setText("");
+                }
+            }
+        });
+
+        addButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SaveEditor.addBagItem((String) dropdownItemList.getSelectedItem(), 1);
+                model.add(model.size(), (String) dropdownItemList.getSelectedItem());
+
+                itemList.setSelectedIndex(model.size() - 1);
+                itemAmountInput.setText("" + SaveReader.readBagItemAmount(model.size() - 1));
+
+            }
+        });
+
         panelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, scroller, 0, SpringLayout.VERTICAL_CENTER, panel);
         panelLayout.putConstraint(SpringLayout.WEST, scroller, 10, SpringLayout.WEST, panel);
 
-        NumberFormatter amountFormat = new NumberFormatter(NumberFormat.getIntegerInstance());
-        amountFormat.setMinimum(1);
-        amountFormat.setMaximum(99);
-//        amountFormat.setAllowsInvalid(false);
-        JFormattedTextField itemAmountInput = new JFormattedTextField(amountFormat);
-        itemAmountInput.setColumns(2);
-        panel.add(itemAmountInput);
-        panelLayout.putConstraint(SpringLayout.WEST, itemAmountInput, 5, SpringLayout.EAST, amountLabel);
-        panelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, itemAmountInput, 2, SpringLayout.VERTICAL_CENTER, amountLabel);
-
         layout.putConstraint(SpringLayout.WEST, panel, 5, SpringLayout.EAST, infoPanel);
         layout.putConstraint(SpringLayout.NORTH, panel, 5, SpringLayout.NORTH, contentPane);
+
+        itemList.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting()) {//This line prevents double events
+                    System.out.println(itemList.getSelectedIndex());
+
+                    if(itemList.getSelectedIndex() != -1) {
+                        itemAmountInput.setText("" + SaveReader.readBagItemAmount(itemList.getSelectedIndex()));
+
+                        dropdownItemList.setSelectedItem(itemList.getSelectedValue());
+
+                    }
+
+                }
+            }
+
+        });
+
+        dropdownItemList.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(itemList.getSelectedIndex() != -1) {
+
+                    SaveEditor.changeBagItem(itemList.getSelectedIndex(), (String) dropdownItemList.getSelectedItem());
+                    model.setElementAt((String) dropdownItemList.getSelectedItem(), itemList.getSelectedIndex());
+
+                }
+            }
+        });
 
     }
 
@@ -547,6 +637,8 @@ public class StartingWindow {
                     Player.trainerID = SaveReader.readPlayerID();
                     idField.setText(SaveReader.readPlayerIDStr());
 
+                    itemAmountField.setText("");
+
 
                 }
 
@@ -577,6 +669,7 @@ public class StartingWindow {
                     SaveEditor.changePlayerMoney(Player.money);
                     SaveEditor.changePlayerGameCornerCoins(Player.coins);
                     SaveEditor.changePlayerID(Player.trainerID);
+                    SaveEditor.writeBagItems();
                     SaveEditor.updateMainDataChecksum();
 
                     generateEditedSaveFile(saveDialog.getDirectory(), saveDialog.getFile(), SaveEditor.getSaveGameData());

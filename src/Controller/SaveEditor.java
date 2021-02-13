@@ -1,9 +1,7 @@
 package Controller;
 
-import Model.CharacterEncodingUtilities;
-import Model.ChecksumUtilities;
-import Model.NumberUtilities;
-import Model.Player;
+import Data.ItemKeys;
+import Model.*;
 
 import java.util.ArrayList;
 
@@ -16,6 +14,62 @@ public class SaveEditor {
 
         changePlayerNumericalValue(newMoneyAmount, Player.MONEY, Player.MONEY_SIZE);
 
+    }
+
+    public static void removeBagItem(int removalIndex){
+        removeItem(Player.bagItemList, removalIndex);
+    }
+
+    public static void addBagItem(String itemName, int itemCount){
+        addItem(Player.bagItemList, ItemKeys.getItemIndex(itemName), itemCount);
+    }
+
+    private static void addItem(ArrayList<Item> itemList, int itemIndex, int itemCount){
+        itemList.add(ItemFactory.generateItem(itemIndex, itemCount));
+    }
+
+    public static void changeBagAmount(int changeIndex, int newCount){
+        changeItemAmount(Player.bagItemList, changeIndex, newCount);
+    }
+
+    public static void changeBagItem(int changeIndex, String newItem){
+        changeItem(Player.bagItemList, changeIndex, newItem);
+    }
+
+    private static void changeItem(ArrayList<Item> itemList, int changeIndex, String newItem){
+        itemList.get(changeIndex).setItem(newItem);
+    }
+
+    private static void changeItemAmount(ArrayList<Item> itemList, int changeIndex, int newCount){
+        itemList.get(changeIndex).setItemCount(newCount);
+    }
+
+    private static void removeItem(ArrayList<Item> itemList, int removalIndex){
+        itemList.remove(removalIndex);
+    }
+
+    public static void writeBagItems(){
+        writePlayerItems(Player.BAG_ITEM_START, Player.bagItemList);
+    }
+
+    private static void writePlayerItems(int location, ArrayList<Item> items){
+        saveGameData[location] = (byte) items.size();
+        location++;
+
+        for(Item k : items){
+            saveGameData[location] = (byte) k.getItemID();
+            saveGameData[location + 1] = (byte) k.getItemCount();
+
+            location += 2;
+        }
+
+        saveGameData[location] = (byte) 0xFF;
+
+    }
+
+    private static void writePlayerItem(int location, int itemIndex, int itemAmount){
+        saveGameData[location] = (byte) itemIndex;
+        saveGameData[location + 1] = (byte) itemAmount;
     }
 
     public static void changePlayerGameCornerCoins(int newCoinsAmount){

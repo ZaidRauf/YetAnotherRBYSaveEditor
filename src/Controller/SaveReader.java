@@ -10,6 +10,18 @@ import java.util.ArrayList;
 public class SaveReader {
     private static byte[] saveGameData;
 
+    public static int readBagNumItems() {
+        return Player.bagItemList.size();
+    }
+
+    public static int readBagItemAmount(int readIndex) {
+        return readItemAmount(Player.bagItemList, readIndex);
+    }
+
+    private static int readItemAmount(ArrayList<Item> itemList, int readIndex){
+        return itemList.get(readIndex).getItemCount();
+    }
+
     public static ArrayList<Item> readBagItemList(){
 
         Player.bagItemList = new ArrayList<Item>();

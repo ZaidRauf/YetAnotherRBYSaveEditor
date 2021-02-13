@@ -1,5 +1,7 @@
 package Model;
 
+import Data.ItemKeys;
+
 public class Item {
     private int itemID;
     private String itemName;
@@ -9,6 +11,15 @@ public class Item {
         itemID = id;
         itemName = name;
         itemCount = count;
+    }
+
+    public void setItemCount(int newAmount) {
+        itemCount = newAmount;
+    }
+
+    public void setItem(String newItem) {
+        itemName = newItem;
+        itemID = ItemKeys.getItemIndex(newItem);
     }
 
     public int getItemCount() {

@@ -26,6 +26,6 @@ public class Player {
     public static int coins = 0;
     public static int trainerID = 0;
 
-    public static ArrayList<Item> bagItemList = new ArrayList(20);
+    public static ArrayList<Item> bagItemList = new ArrayList<>();
 
 }
