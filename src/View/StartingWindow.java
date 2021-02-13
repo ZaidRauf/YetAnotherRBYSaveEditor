@@ -1,21 +1,28 @@
 package View;
 
-import Model.FileInput;
+import Controller.FileInput;
+import Data.ItemKeys;
+import Model.Item;
 import Model.Player;
-import Model.SaveEditor;
-import Model.SaveReader;
+import Controller.SaveEditor;
+import Controller.SaveReader;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
+import javax.swing.border.LineBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.text.NumberFormatter;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.geom.Line2D;
 import java.io.File;
 import java.io.IOException;
+import java.text.NumberFormat;
 
-import static Model.FileOutput.generateEditedSaveFile;
+import static Controller.FileOutput.generateEditedSaveFile;
+import static javax.swing.ListSelectionModel.SINGLE_SELECTION;
 
 public class StartingWindow {
 
@@ -31,6 +38,7 @@ public class StartingWindow {
    private static JTextField coinsField = null;
    private static JTextField idField = null;
    private static JCheckBox[] checkArray = null;
+   private static DefaultListModel<String> itemModel = null;
 
    private static void createPlayerBadgesPanel(){
        JPanel panel = new JPanel();
@@ -177,14 +185,14 @@ public class StartingWindow {
        editorPanel = panel;
        SpringLayout panelLayout = new SpringLayout();
        panel.setLayout(panelLayout);
-       panel.setPreferredSize(new Dimension(255,140));
+       panel.setPreferredSize(new Dimension(330,210));
        Border raisedEtched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
        raisedEtched = BorderFactory.createTitledBorder(raisedEtched, "PokéEditor");
        panel.setBorder(raisedEtched);
        contentPane.add(panel);
 
-       layout.putConstraint(SpringLayout.WEST, panel, 5, SpringLayout.EAST, infoPanel);
-       layout.putConstraint(SpringLayout.NORTH, panel, 5, SpringLayout.NORTH, contentPane);
+       layout.putConstraint(SpringLayout.WEST, panel, 5, SpringLayout.EAST, badgesPanel);
+       layout.putConstraint(SpringLayout.NORTH, panel, 0, SpringLayout.NORTH, badgesPanel);
    }
 
     private static void pokemonBrowserPanel(){
@@ -206,14 +214,94 @@ public class StartingWindow {
         JPanel panel = new JPanel();
         SpringLayout panelLayout = new SpringLayout();
         panel.setLayout(panelLayout);
-        panel.setPreferredSize(new Dimension(255,130));
+        panel.setPreferredSize(new Dimension(330,140));
         Border raisedEtched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
         raisedEtched = BorderFactory.createTitledBorder(raisedEtched, "Item Editor");
         panel.setBorder(raisedEtched);
         contentPane.add(panel);
 
-        layout.putConstraint(SpringLayout.WEST, panel, 5, SpringLayout.EAST, badgesPanel);
-        layout.putConstraint(SpringLayout.NORTH, panel, 5, SpringLayout.SOUTH, browserPanel);
+        DefaultListModel<String> model = new DefaultListModel<>();
+        JList<String> itemList = new JList<>( model );
+        itemList.setSelectionMode(SINGLE_SELECTION);
+        itemList.setLayoutOrientation(JList.VERTICAL);
+        itemList.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting()) {//This line prevents double events
+                    System.out.println(itemList.getSelectedIndex());
+                }
+            }
+
+        });
+
+        JScrollPane scroller = new JScrollPane(itemList, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scroller.setPreferredSize(new Dimension(90,80));
+        panel.add(scroller);
+        itemModel = model;
+
+        DefaultComboBoxModel<String> comboBoxModel = new DefaultComboBoxModel<>();
+        JComboBox<String> dropdownItemList = new JComboBox<>(comboBoxModel);
+        dropdownItemList.setPreferredSize(new Dimension(138, 25));
+
+        JLabel itemLabel = new JLabel("Item: ");
+        panel.add(itemLabel);
+        panelLayout.putConstraint(SpringLayout.EAST, itemLabel, 2, SpringLayout.WEST, dropdownItemList);
+        panelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, itemLabel, -2, SpringLayout.VERTICAL_CENTER, dropdownItemList);
+
+        for(int key = 0; key < ItemKeys.numItems(); key++){
+            String str = ItemKeys.getItemString(key);
+
+            if (str == null){
+                continue;
+            }
+
+            comboBoxModel.addElement(str);
+        }
+
+        panel.add(dropdownItemList);
+        panelLayout.putConstraint(SpringLayout.EAST, dropdownItemList, 0, SpringLayout.EAST, panel);
+        panelLayout.putConstraint(SpringLayout.NORTH, dropdownItemList, 20, SpringLayout.NORTH, panel);
+
+        JLabel amountLabel = new JLabel("Amount:");
+        panel.add(amountLabel);
+        panelLayout.putConstraint(SpringLayout.NORTH, amountLabel, 10, SpringLayout.SOUTH, itemLabel);
+        panelLayout.putConstraint(SpringLayout.WEST, amountLabel, 0, SpringLayout.WEST, itemLabel);
+
+        JLabel countLabel = new JLabel("Capacity: ");
+        panel.add(countLabel);
+        panelLayout.putConstraint(SpringLayout.NORTH, countLabel, 10, SpringLayout.SOUTH, amountLabel);
+        panelLayout.putConstraint(SpringLayout.WEST, countLabel, 0, SpringLayout.WEST, itemLabel);
+
+        JButton addButton = new JButton("+");
+        panel.add(addButton);
+        addButton.setPreferredSize(new Dimension(40, 23));
+        addButton.setToolTipText("Add a new item");
+        panelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, addButton, -12, SpringLayout.VERTICAL_CENTER, scroller);
+        panelLayout.putConstraint(SpringLayout.WEST, addButton, 0, SpringLayout.EAST, scroller);
+
+        JButton removeButton = new JButton("-");
+        panel.add(removeButton);
+        removeButton.setPreferredSize(new Dimension(40, 23));
+        removeButton.setToolTipText("Remove the highlighted item");
+        panelLayout.putConstraint(SpringLayout.NORTH, removeButton, 5, SpringLayout.SOUTH, addButton);
+        panelLayout.putConstraint(SpringLayout.WEST, removeButton, 0, SpringLayout.EAST, scroller);
+
+        panelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, scroller, 0, SpringLayout.VERTICAL_CENTER, panel);
+        panelLayout.putConstraint(SpringLayout.WEST, scroller, 10, SpringLayout.WEST, panel);
+
+        NumberFormatter amountFormat = new NumberFormatter(NumberFormat.getIntegerInstance());
+        amountFormat.setMinimum(1);
+        amountFormat.setMaximum(99);
+//        amountFormat.setAllowsInvalid(false);
+        JFormattedTextField itemAmountInput = new JFormattedTextField(amountFormat);
+        itemAmountInput.setColumns(2);
+        panel.add(itemAmountInput);
+        panelLayout.putConstraint(SpringLayout.WEST, itemAmountInput, 5, SpringLayout.EAST, amountLabel);
+        panelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, itemAmountInput, 2, SpringLayout.VERTICAL_CENTER, amountLabel);
+
+        layout.putConstraint(SpringLayout.WEST, panel, 5, SpringLayout.EAST, infoPanel);
+        layout.putConstraint(SpringLayout.NORTH, panel, 5, SpringLayout.NORTH, contentPane);
+
     }
 
     private static void createPlayerInfoPanel(){
@@ -232,7 +320,7 @@ public class StartingWindow {
         JLabel nameLabel = new JLabel("Name: ");
         panel.add(nameLabel);
 
-        JTextField nameInput = new JTextField(7);
+        JTextField nameInput = new  JTextField(7);
         nameField = nameInput;
         panel.add(nameInput);
 
@@ -387,7 +475,7 @@ public class StartingWindow {
     private static void createAndShowGUI() {
         JFrame frame = new JFrame("Yet Another RBY Editor");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setPreferredSize(new Dimension(440,430));
+        frame.setPreferredSize(new Dimension(515,430));
 
         contentPane = frame.getContentPane();
         layout = new SpringLayout();
@@ -428,6 +516,13 @@ public class StartingWindow {
                     rivalField.setText(Player.rivalName);
 
                     Player.gymBadges = SaveReader.readBadges();
+
+                    SaveReader.readBagItemList();
+
+                    itemModel.clear();
+                    for(Item item : Player.bagItemList){
+                        itemModel.addElement(item.getItemName());
+                    }
 
                     int bitCheck =  0b00000001;
 
@@ -494,7 +589,6 @@ public class StartingWindow {
         createPlayerInfoPanel();
         createPlayerBadgesPanel();
         pokemonEditorPanel();
-        pokemonBrowserPanel();
         itemEditorPanel();
 
         frame.pack();
@@ -502,6 +596,15 @@ public class StartingWindow {
     }
 
     public static void main(String[] args) {
+        try {
+            // Set cross-platform Java L&F (also called "Metal")
+            UIManager.setLookAndFeel(
+                    UIManager.getSystemLookAndFeelClassName());
+        }
+        catch (UnsupportedLookAndFeelException | IllegalAccessException | InstantiationException | ClassNotFoundException e) {
+            System.exit(1);
+        }
+
         createAndShowGUI();
     }
 

@@ -2,9 +2,16 @@ package Data;
 
 import java.util.Map;
 
-public class itemKeys {
-    private static final Map<Integer, String> pkmnIndexMap = Map.ofEntries(
-            Map.entry(0, "Nothing"),
+public class ItemKeys {
+    public static String getItemString(int index){
+        return itemIndexMap.get(index);
+    }
+
+    public static int numItems(){
+        return itemIndexMap.size();
+    }
+
+    private static final Map<Integer, String> itemIndexMap = Map.ofEntries(
             Map.entry(1, "Master Ball"),
             Map.entry(2, "Ultra Ball"),
             Map.entry(3, "Great Ball"),
@@ -12,7 +19,6 @@ public class itemKeys {
             Map.entry(5, "Town Map"),
             Map.entry(6, "Bicycle"),
             Map.entry(8, "Safari Ball"),
-            Map.entry(9, "Pokédex"),
             Map.entry(10, "Moon Stone"),
             Map.entry(11, "Antidote"),
             Map.entry(12, "Burn Heal"),
@@ -44,7 +50,7 @@ public class itemKeys {
             Map.entry(47, "Leaf Stone"),
             Map.entry(48, "Card Key"),
             Map.entry(49, "Nugget"),
-            Map.entry(50, "PP Up*"),
+            Map.entry(50, "PP Up"),
             Map.entry(51, "Poké Doll"),
             Map.entry(52, "Full Heal"),
             Map.entry(53, "Revive"),

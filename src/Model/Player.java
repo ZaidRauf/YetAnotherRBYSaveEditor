@@ -15,6 +15,9 @@ public class Player {
     public static final int COINS_SIZE = 0x2;
     public static final int ID = 0x2605;
     public static final int ID_SIZE = 0x2;
+    public static final int BAG_ITEM_START = 0x25C9;
+    public static final int BAG_ITEM_COUNT_SIZE = 0x1;
+    public static final int ITEM_SIZE = 0x2;
 
     public static String playerName;
     public static String rivalName;

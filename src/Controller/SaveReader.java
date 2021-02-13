@@ -1,7 +1,41 @@
-package Model;
+package Controller;
+
+import Model.CharacterDecodingUtilities;
+import Model.Item;
+import Model.NumberUtilities;
+import Model.Player;
+
+import java.util.ArrayList;
 
 public class SaveReader {
     private static byte[] saveGameData;
+
+    public static ArrayList<Item> readBagItemList(){
+
+        Player.bagItemList = new ArrayList<Item>();
+
+        int itemCount = saveGameData[Player.BAG_ITEM_START];
+        int readingIndex = Player.BAG_ITEM_START + 1;
+
+        for(int k = 0; k < itemCount; k++){
+
+            Item item = readPlayerItem(readingIndex);
+            readingIndex += Player.ITEM_SIZE;
+            Player.bagItemList.add(item);
+
+            System.out.println(item.getItemName() + " " + item.getItemCount());
+
+        }
+
+        return Player.bagItemList;
+    }
+
+    private static Item readPlayerItem(int itemStart){
+        int itemIndex = saveGameData[itemStart];
+        int itemCount = saveGameData[itemStart + 1];
+
+        return ItemFactory.generateItem(itemIndex, itemCount);
+    }
 
     public static int readPlayerID(){
         int upperHalf =  saveGameData[Player.ID];

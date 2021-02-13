@@ -1,4 +1,9 @@
-package Model;
+package Controller;
+
+import Model.CharacterEncodingUtilities;
+import Model.ChecksumUtilities;
+import Model.NumberUtilities;
+import Model.Player;
 
 import java.util.ArrayList;
 

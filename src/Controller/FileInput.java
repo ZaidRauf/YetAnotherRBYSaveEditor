@@ -1,4 +1,4 @@
-package Model;
+package Controller;
 import java.io.*;
 
 public class FileInput {
