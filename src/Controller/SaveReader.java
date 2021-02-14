@@ -10,6 +10,20 @@ import java.util.ArrayList;
 public class SaveReader {
     private static byte[] saveGameData;
 
+    public static int readCurrentInventoryItems(boolean bagItems){
+        if(bagItems){
+            return readBagNumItems();
+        }
+
+        else{
+            return readPCNumItems();
+        }
+    }
+
+    public static int readPCNumItems() {
+        return Player.pcItemList.size();
+    }
+
     public static int readBagNumItems() {
         return Player.bagItemList.size();
     }
@@ -22,7 +36,26 @@ public class SaveReader {
         return itemList.get(readIndex).getItemCount();
     }
 
-    public static ArrayList<Item> readBagItemList(){
+    public static void readPCItemList(){
+
+        Player.pcItemList = new ArrayList<Item>();
+
+        int itemCount = saveGameData[Player.PC_ITEM_START];
+        int readingIndex = Player.PC_ITEM_START + 1;
+
+        for(int k = 0; k < itemCount; k++){
+
+            Item item = readPlayerItem(readingIndex);
+            readingIndex += Player.ITEM_SIZE;
+            Player.pcItemList.add(item);
+
+            System.out.println(item.getItemName() + " " + item.getItemCount());
+
+        }
+
+    }
+
+    public static void readBagItemList(){
 
         Player.bagItemList = new ArrayList<Item>();
 
@@ -39,7 +72,6 @@ public class SaveReader {
 
         }
 
-        return Player.bagItemList;
     }
 
     private static Item readPlayerItem(int itemStart){

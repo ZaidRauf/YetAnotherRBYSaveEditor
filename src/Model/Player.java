@@ -18,6 +18,7 @@ public class Player {
     public static final int BAG_ITEM_START = 0x25C9;
     public static final int BAG_ITEM_COUNT_SIZE = 0x1;
     public static final int ITEM_SIZE = 0x2;
+    public static final int PC_ITEM_START = 0x27E6;
 
     public static String playerName;
     public static String rivalName;
@@ -27,5 +28,6 @@ public class Player {
     public static int trainerID = 0;
 
     public static ArrayList<Item> bagItemList = new ArrayList<>();
+    public static ArrayList<Item> pcItemList = new ArrayList<>();
 
 }

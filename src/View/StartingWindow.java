@@ -44,6 +44,8 @@ public class StartingWindow {
    private static JCheckBox[] checkArray = null;
    private static DefaultListModel<String> itemModel = null;
    private static JFormattedTextField itemAmountField = null;
+   private static JLabel itemCounter = null;
+   private static Boolean currentInventoryIsBag = null;
 
    private static void createPlayerBadgesPanel(){
        JPanel panel = new JPanel();
@@ -225,6 +227,8 @@ public class StartingWindow {
         raisedEtched = BorderFactory.createTitledBorder(raisedEtched, "Item Editor");
         panel.setBorder(raisedEtched);
         contentPane.add(panel);
+        Boolean workingOnBag = true;
+        currentInventoryIsBag = workingOnBag;
 
         DefaultListModel<String> model = new DefaultListModel<>();
         JList<String> itemList = new JList<>( model );
@@ -239,6 +243,17 @@ public class StartingWindow {
         DefaultComboBoxModel<String> comboBoxModel = new DefaultComboBoxModel<>();
         JComboBox<String> dropdownItemList = new JComboBox<>(comboBoxModel);
         dropdownItemList.setPreferredSize(new Dimension(138, 25));
+
+        JLabel bagLabel = new JLabel("Bag Items");
+        JLabel pcLabel = new JLabel("PC Items");
+
+        panelLayout.putConstraint(SpringLayout.SOUTH, pcLabel,0, SpringLayout.NORTH, scroller);
+        panelLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, pcLabel,0, SpringLayout.HORIZONTAL_CENTER, scroller);
+
+        panelLayout.putConstraint(SpringLayout.SOUTH, bagLabel,0, SpringLayout.NORTH, scroller);
+        panelLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, bagLabel,0, SpringLayout.HORIZONTAL_CENTER, scroller);
+        panel.add(bagLabel);
+
 
         JLabel itemLabel = new JLabel("Item: ");
         panel.add(itemLabel);
@@ -305,6 +320,7 @@ public class StartingWindow {
         panel.add(countLabel);
         panelLayout.putConstraint(SpringLayout.NORTH, countLabel, 10, SpringLayout.SOUTH, amountLabel);
         panelLayout.putConstraint(SpringLayout.WEST, countLabel, 0, SpringLayout.WEST, itemLabel);
+        itemCounter = countLabel;
 
         JButton addButton = new JButton("+");
         panel.add(addButton);
@@ -327,6 +343,7 @@ public class StartingWindow {
                     int currIdx = itemList.getSelectedIndex();
 
                     SaveEditor.removeBagItem(itemList.getSelectedIndex());
+                    itemCounter.setText("Capacity: " + SaveReader.readCurrentInventoryItems(workingOnBag) + "/20");
                     model.removeElementAt(itemList.getSelectedIndex());
                     itemAmountInput.setText("");
 
@@ -340,6 +357,14 @@ public class StartingWindow {
                     SaveEditor.removeBagItem(model.size() - 1);
                     model.removeElementAt(model.size() - 1);
                     itemAmountInput.setText("");
+
+                    if(workingOnBag){
+                        itemCounter.setText("Capacity: " + SaveReader.readCurrentInventoryItems(workingOnBag) + "/20");
+                    }
+
+                    else{
+                        itemCounter.setText("Capacity: " + SaveReader.readCurrentInventoryItems(workingOnBag) + "/50");
+                    }
                 }
             }
         });
@@ -347,12 +372,13 @@ public class StartingWindow {
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                SaveEditor.addBagItem((String) dropdownItemList.getSelectedItem(), 1);
-                model.add(model.size(), (String) dropdownItemList.getSelectedItem());
-
-                itemList.setSelectedIndex(model.size() - 1);
-                itemAmountInput.setText("" + SaveReader.readBagItemAmount(model.size() - 1));
-
+                if((workingOnBag && SaveReader.readBagNumItems() < 20)) {
+                    SaveEditor.addBagItem((String) dropdownItemList.getSelectedItem(), 1);
+                    model.add(model.size(), (String) dropdownItemList.getSelectedItem());
+                    itemCounter.setText("Capacity: " + SaveReader.readBagNumItems() + "/20");
+                    itemList.setSelectedIndex(model.size() - 1);
+                    itemAmountInput.setText("" + SaveReader.readBagItemAmount(model.size() - 1));
+                }
             }
         });
 
@@ -608,6 +634,7 @@ public class StartingWindow {
                     Player.gymBadges = SaveReader.readBadges();
 
                     SaveReader.readBagItemList();
+                    SaveReader.readPCItemList();
 
                     itemModel.clear();
                     for(Item item : Player.bagItemList){
@@ -638,6 +665,8 @@ public class StartingWindow {
                     idField.setText(SaveReader.readPlayerIDStr());
 
                     itemAmountField.setText("");
+
+                    itemCounter.setText("Capacity: " + SaveReader.readBagNumItems() + "/20");
 
 
                 }
