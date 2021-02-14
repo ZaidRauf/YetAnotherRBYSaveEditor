@@ -1,14 +1,16 @@
 package Controller;
 
-import Model.CharacterDecodingUtilities;
-import Model.Item;
-import Model.NumberUtilities;
-import Model.Player;
+import Model.*;
 
 import java.util.ArrayList;
 
 public class SaveReader {
     private static byte[] saveGameData;
+
+    public static Pokemon readPartyPokemon(int location){
+        Pokemon pkmn = new Pokemon();
+        return pkmn;
+    }
 
     public static int readCurrentInventoryItems(boolean bagItems){
         if(bagItems){

@@ -3,13 +3,13 @@ package Model;
 import Data.Type;
 
 public class Pokemon {
-    String speciesName;
-    String nickName;
+//    String speciesName;
+//    String nickName;
     int speciesIndex;
     int currentHP;
     int statusCondition;
-    Type type1;
-    Type type2;
+//    Type type1;
+//    Type type2;
     int catchRate;
     int move1;
     int move2;
@@ -26,11 +26,11 @@ public class Pokemon {
     int move2_pp;
     int move3_pp;
     int move4_pp;
-    int level;
-    int max_hp;
-    int stat_atk;
-    int stat_def;
-    int stat_spd;
-    int stat_spec;
+//    int level;
+//    int max_hp;
+//    int stat_atk;
+//    int stat_def;
+//    int stat_spd;
+//    int stat_spec;
 
 }
