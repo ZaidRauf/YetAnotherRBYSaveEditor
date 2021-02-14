@@ -28,6 +28,20 @@ public class SaveReader {
         return Player.bagItemList.size();
     }
 
+    public static int readCurrentInventoryItemAmount(int readIndex, boolean bagItems){
+        if(bagItems){
+            return readItemAmount(Player.bagItemList, readIndex);
+        }
+
+        else{
+            return readItemAmount(Player.pcItemList, readIndex);
+        }
+    }
+
+    public static int readPCItemAmount(int readIndex) {
+        return readItemAmount(Player.pcItemList, readIndex);
+    }
+
     public static int readBagItemAmount(int readIndex) {
         return readItemAmount(Player.bagItemList, readIndex);
     }

@@ -10,8 +10,8 @@ import Controller.SaveReader;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
-import javax.swing.border.LineBorder;
-import javax.swing.event.ListDataListener;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.text.NumberFormatter;
@@ -33,8 +33,8 @@ public class StartingWindow {
    private static SpringLayout layout = null;
    private static JPanel infoPanel = null;
    private static JPanel pokeEditorPanel = null;
-    private static JPanel itemEditorPanel = null;
-    private static JPanel browserPanel = null;
+   private static JPanel itemEditorPanel = null;
+   private static JPanel browserPanel = null;
    private static JPanel badgesPanel = null;
    private static JTextField nameField = null;
    private static JTextField rivalField = null;
@@ -45,7 +45,10 @@ public class StartingWindow {
    private static DefaultListModel<String> itemModel = null;
    private static JFormattedTextField itemAmountField = null;
    private static JLabel itemCounter = null;
-   private static Boolean currentInventoryIsBag = null;
+    private static JLabel bagTitle = null;
+    private static JLabel pcTitle = null;
+    private static Boolean currentInventoryIsBag = true;
+    private static JRadioButton bagRadio = null;
 
    private static void createPlayerBadgesPanel(){
        JPanel panel = new JPanel();
@@ -219,7 +222,7 @@ public class StartingWindow {
 
     private static void itemEditorPanel(){
         JPanel panel = new JPanel();
-        itemEditorPanel = itemEditorPanel;
+        itemEditorPanel = panel;
         SpringLayout panelLayout = new SpringLayout();
         panel.setLayout(panelLayout);
         panel.setPreferredSize(new Dimension(330,140));
@@ -227,8 +230,6 @@ public class StartingWindow {
         raisedEtched = BorderFactory.createTitledBorder(raisedEtched, "Item Editor");
         panel.setBorder(raisedEtched);
         contentPane.add(panel);
-        Boolean workingOnBag = true;
-        currentInventoryIsBag = workingOnBag;
 
         DefaultListModel<String> model = new DefaultListModel<>();
         JList<String> itemList = new JList<>( model );
@@ -247,12 +248,17 @@ public class StartingWindow {
         JLabel bagLabel = new JLabel("Bag Items");
         JLabel pcLabel = new JLabel("PC Items");
 
+        bagTitle = bagLabel;
+        pcTitle = pcLabel;
+
         panelLayout.putConstraint(SpringLayout.SOUTH, pcLabel,0, SpringLayout.NORTH, scroller);
         panelLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, pcLabel,0, SpringLayout.HORIZONTAL_CENTER, scroller);
 
         panelLayout.putConstraint(SpringLayout.SOUTH, bagLabel,0, SpringLayout.NORTH, scroller);
         panelLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, bagLabel,0, SpringLayout.HORIZONTAL_CENTER, scroller);
         panel.add(bagLabel);
+        panel.add(pcTitle);
+        pcTitle.setVisible(false);
 
 
         JLabel itemLabel = new JLabel("Item: ");
@@ -272,7 +278,7 @@ public class StartingWindow {
 
         panel.add(dropdownItemList);
         panelLayout.putConstraint(SpringLayout.EAST, dropdownItemList, 0, SpringLayout.EAST, panel);
-        panelLayout.putConstraint(SpringLayout.NORTH, dropdownItemList, 20, SpringLayout.NORTH, panel);
+        panelLayout.putConstraint(SpringLayout.NORTH, dropdownItemList, 0, SpringLayout.NORTH, panel);
 
         JLabel amountLabel = new JLabel("Amount:");
         panel.add(amountLabel);
@@ -305,7 +311,7 @@ public class StartingWindow {
             public void keyReleased(KeyEvent e) {
                 try {
                     if (itemList.getSelectedIndex() != -1 && !itemAmountInput.getText().equals("") && Integer.parseInt(itemAmountInput.getText()) > 0) {
-                        SaveEditor.changeBagAmount(itemList.getSelectedIndex(), Integer.parseInt(itemAmountInput.getText()));
+                        SaveEditor.changeCurrentInventoryAmount(itemList.getSelectedIndex(), Integer.parseInt(itemAmountInput.getText()), currentInventoryIsBag);
                     }
                 }
                 catch (NumberFormatException nfe){
@@ -316,7 +322,7 @@ public class StartingWindow {
             }
         });
 
-        JLabel countLabel = new JLabel("Capacity: ");
+        JLabel countLabel = new JLabel("Capacity: 0/20");
         panel.add(countLabel);
         panelLayout.putConstraint(SpringLayout.NORTH, countLabel, 10, SpringLayout.SOUTH, amountLabel);
         panelLayout.putConstraint(SpringLayout.WEST, countLabel, 0, SpringLayout.WEST, itemLabel);
@@ -342,28 +348,34 @@ public class StartingWindow {
                 if(itemList.getSelectedIndex() != -1) {
                     int currIdx = itemList.getSelectedIndex();
 
-                    SaveEditor.removeBagItem(itemList.getSelectedIndex());
-                    itemCounter.setText("Capacity: " + SaveReader.readCurrentInventoryItems(workingOnBag) + "/20");
+                    SaveEditor.removeCurrentInventoryItem(itemList.getSelectedIndex(), currentInventoryIsBag);
+
+                    if(currentInventoryIsBag) {
+                        itemCounter.setText("Capacity: " + SaveReader.readCurrentInventoryItems(currentInventoryIsBag) + "/20");
+                    }
+                    else{
+                        itemCounter.setText("Capacity: " + SaveReader.readCurrentInventoryItems(currentInventoryIsBag) + "/50");
+                    }
                     model.removeElementAt(itemList.getSelectedIndex());
                     itemAmountInput.setText("");
 
                     if(model.size() != 0 && currIdx != 0){
                         itemList.setSelectedIndex(currIdx-1);
-                        itemAmountInput.setText("" + SaveReader.readBagItemAmount(itemList.getSelectedIndex()));
+                        itemAmountInput.setText("" + SaveReader.readCurrentInventoryItemAmount(itemList.getSelectedIndex(), currentInventoryIsBag));
                     }
                 }
 
                 else if(model.size() > 0 && itemList.getSelectedIndex() == -1){
-                    SaveEditor.removeBagItem(model.size() - 1);
+                    SaveEditor.removeCurrentInventoryItem(model.size() - 1, currentInventoryIsBag);
                     model.removeElementAt(model.size() - 1);
                     itemAmountInput.setText("");
 
-                    if(workingOnBag){
-                        itemCounter.setText("Capacity: " + SaveReader.readCurrentInventoryItems(workingOnBag) + "/20");
+                    if(currentInventoryIsBag){
+                        itemCounter.setText("Capacity: " + SaveReader.readCurrentInventoryItems(currentInventoryIsBag) + "/20");
                     }
 
                     else{
-                        itemCounter.setText("Capacity: " + SaveReader.readCurrentInventoryItems(workingOnBag) + "/50");
+                        itemCounter.setText("Capacity: " + SaveReader.readCurrentInventoryItems(currentInventoryIsBag) + "/50");
                     }
                 }
             }
@@ -372,12 +384,19 @@ public class StartingWindow {
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if((workingOnBag && SaveReader.readBagNumItems() < 20)) {
-                    SaveEditor.addBagItem((String) dropdownItemList.getSelectedItem(), 1);
+                if((currentInventoryIsBag && SaveReader.readBagNumItems() < 20) || (!currentInventoryIsBag && SaveReader.readPCNumItems()  < 50)) {
+                    SaveEditor.addCurrentInventoryItem((String) dropdownItemList.getSelectedItem(), 1, currentInventoryIsBag);
                     model.add(model.size(), (String) dropdownItemList.getSelectedItem());
-                    itemCounter.setText("Capacity: " + SaveReader.readBagNumItems() + "/20");
+                    if(currentInventoryIsBag) {
+                        itemCounter.setText("Capacity: " + SaveReader.readBagNumItems() + "/20");
+                    }
+
+                    else{
+                        itemCounter.setText("Capacity: " + SaveReader.readPCNumItems() + "/50");
+                    }
+
                     itemList.setSelectedIndex(model.size() - 1);
-                    itemAmountInput.setText("" + SaveReader.readBagItemAmount(model.size() - 1));
+                    itemAmountInput.setText("" + SaveReader.readCurrentInventoryItemAmount(model.size() - 1, currentInventoryIsBag));
                 }
             }
         });
@@ -395,8 +414,7 @@ public class StartingWindow {
                     System.out.println(itemList.getSelectedIndex());
 
                     if(itemList.getSelectedIndex() != -1) {
-                        itemAmountInput.setText("" + SaveReader.readBagItemAmount(itemList.getSelectedIndex()));
-
+                        itemAmountInput.setText("" + SaveReader.readCurrentInventoryItemAmount(itemList.getSelectedIndex(), currentInventoryIsBag));
                         dropdownItemList.setSelectedItem(itemList.getSelectedValue());
 
                     }
@@ -411,8 +429,76 @@ public class StartingWindow {
             public void actionPerformed(ActionEvent e) {
                 if(itemList.getSelectedIndex() != -1) {
 
-                    SaveEditor.changeBagItem(itemList.getSelectedIndex(), (String) dropdownItemList.getSelectedItem());
+                    SaveEditor.changeCurrentInventoryItem(itemList.getSelectedIndex(), (String) dropdownItemList.getSelectedItem(), currentInventoryIsBag);
                     model.setElementAt((String) dropdownItemList.getSelectedItem(), itemList.getSelectedIndex());
+
+                }
+            }
+        });
+
+
+        JLabel inventoryLabel = new JLabel("Inventory: ");
+        panelLayout.putConstraint(SpringLayout.NORTH, inventoryLabel, 10, SpringLayout.SOUTH, countLabel);
+        panelLayout.putConstraint(SpringLayout.WEST, inventoryLabel, 0, SpringLayout.WEST, itemLabel);
+        panel.add(inventoryLabel);
+
+        JRadioButton pcButton = new JRadioButton("PC");
+        JRadioButton bagButton = new JRadioButton("Bag", true);
+
+        panelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, pcButton, 0, SpringLayout.VERTICAL_CENTER, bagButton);
+        panelLayout.putConstraint(SpringLayout.WEST, pcButton, 0, SpringLayout.EAST, bagButton);
+
+        panelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, bagButton, 1, SpringLayout.VERTICAL_CENTER, inventoryLabel);
+        panelLayout.putConstraint(SpringLayout.WEST, bagButton, -6, SpringLayout.EAST, inventoryLabel);
+        panel.add(bagButton);
+        panel.add(pcButton);
+
+        ButtonGroup inventorySelectGroup = new ButtonGroup();
+        inventorySelectGroup.add(bagButton);
+        inventorySelectGroup.add(pcButton);
+
+        bagRadio = bagButton;
+
+        bagButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(!currentInventoryIsBag) {
+                    currentInventoryIsBag = true;
+                    System.out.println("bagClicked");
+
+                    pcTitle.setVisible(false);
+                    bagTitle.setVisible(true);
+
+                    itemModel.clear();
+                    for(Item item : Player.bagItemList){
+                        itemModel.addElement(item.getItemName());
+                    }
+
+                    itemAmountField.setText("");
+
+                    itemCounter.setText("Capacity: " + SaveReader.readBagNumItems() + "/20");
+
+                }
+            }
+        });
+
+        pcButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(currentInventoryIsBag) {
+                    currentInventoryIsBag = false;
+                    System.out.println("pcClicked");
+
+                    pcTitle.setVisible(true);
+                    bagTitle.setVisible(false);
+
+                    itemCounter.setText("Capacity: " + SaveReader.readPCNumItems() + "/50");
+
+                    itemModel.clear();
+                    for(Item item : Player.pcItemList){
+                        itemModel.addElement(item.getItemName());
+                    }
+                    itemAmountField.setText("");
 
                 }
             }
@@ -636,11 +722,6 @@ public class StartingWindow {
                     SaveReader.readBagItemList();
                     SaveReader.readPCItemList();
 
-                    itemModel.clear();
-                    for(Item item : Player.bagItemList){
-                        itemModel.addElement(item.getItemName());
-                    }
-
                     int bitCheck =  0b00000001;
 
                     for (int i = 0; i < 8; i++){
@@ -664,8 +745,13 @@ public class StartingWindow {
                     Player.trainerID = SaveReader.readPlayerID();
                     idField.setText(SaveReader.readPlayerIDStr());
 
-                    itemAmountField.setText("");
+                    itemModel.clear();
+                    for(Item item : Player.bagItemList){
+                        itemModel.addElement(item.getItemName());
+                    }
 
+                    itemAmountField.setText("");
+                    bagRadio.doClick();
                     itemCounter.setText("Capacity: " + SaveReader.readBagNumItems() + "/20");
 
 
@@ -699,6 +785,7 @@ public class StartingWindow {
                     SaveEditor.changePlayerGameCornerCoins(Player.coins);
                     SaveEditor.changePlayerID(Player.trainerID);
                     SaveEditor.writeBagItems();
+                    SaveEditor.writePCItems();
                     SaveEditor.updateMainDataChecksum();
 
                     generateEditedSaveFile(saveDialog.getDirectory(), saveDialog.getFile(), SaveEditor.getSaveGameData());

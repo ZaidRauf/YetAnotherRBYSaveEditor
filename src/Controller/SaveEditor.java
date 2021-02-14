@@ -16,8 +16,28 @@ public class SaveEditor {
 
     }
 
+    public static void removeCurrentInventoryItem(int removalIndex, boolean isBag){
+        if(isBag){
+            removeItem(Player.bagItemList, removalIndex);
+        }
+
+        else{
+            removeItem(Player.pcItemList, removalIndex);
+        }
+    }
+
     public static void removeBagItem(int removalIndex){
         removeItem(Player.bagItemList, removalIndex);
+    }
+
+    public static void addCurrentInventoryItem(String itemName, int itemCount, boolean isBag){
+        if(isBag) {
+            addItem(Player.bagItemList, ItemKeys.getItemIndex(itemName), itemCount);
+        }
+
+        else{
+            addItem(Player.pcItemList, ItemKeys.getItemIndex(itemName), itemCount);
+        }
     }
 
     public static void addBagItem(String itemName, int itemCount){
@@ -28,8 +48,29 @@ public class SaveEditor {
         itemList.add(ItemFactory.generateItem(itemIndex, itemCount));
     }
 
+    public static void changeCurrentInventoryAmount(int changeIndex, int newCount, boolean isBag) {
+        if (isBag){
+            changeItemAmount(Player.bagItemList, changeIndex, newCount);
+        }
+
+        else{
+            changeItemAmount(Player.pcItemList, changeIndex, newCount);
+        }
+
+    }
+
     public static void changeBagAmount(int changeIndex, int newCount){
         changeItemAmount(Player.bagItemList, changeIndex, newCount);
+    }
+
+    public static void changeCurrentInventoryItem(int changeIndex, String newItem, boolean isBag){
+        if(isBag) {
+            changeItem(Player.bagItemList, changeIndex, newItem);
+        }
+
+        else{
+            changeItem(Player.pcItemList, changeIndex, newItem);
+        }
     }
 
     public static void changeBagItem(int changeIndex, String newItem){
@@ -46,6 +87,10 @@ public class SaveEditor {
 
     private static void removeItem(ArrayList<Item> itemList, int removalIndex){
         itemList.remove(removalIndex);
+    }
+
+    public static void writePCItems(){
+        writePlayerItems(Player.PC_ITEM_START, Player.pcItemList);
     }
 
     public static void writeBagItems(){
