@@ -193,7 +193,7 @@ public class StartingWindow {
        pokeEditorPanel = panel;
        SpringLayout panelLayout = new SpringLayout();
        panel.setLayout(panelLayout);
-       panel.setPreferredSize(new Dimension(420,210));
+       panel.setPreferredSize(new Dimension(512,210));
        Border raisedEtched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
        raisedEtched = BorderFactory.createTitledBorder(raisedEtched, "PokéEditor");
        panel.setBorder(raisedEtched);
@@ -205,21 +205,21 @@ public class StartingWindow {
        DefaultComboBoxModel<String> comboBoxModel_species = new DefaultComboBoxModel<>();
        JComboBox<String> speciesDropdown = new JComboBox<>(comboBoxModel_species);
        speciesDropdown.setPreferredSize(new Dimension(138, 25));
-       panelLayout.putConstraint(SpringLayout.NORTH, speciesDropdown, 20, SpringLayout.NORTH, panel);
+       panelLayout.putConstraint(SpringLayout.NORTH, speciesDropdown, 12, SpringLayout.NORTH, panel);
        panelLayout.putConstraint(SpringLayout.EAST, speciesDropdown, 0, SpringLayout.EAST, panel);
        panel.add(speciesDropdown);
 
        DefaultComboBoxModel<String> comboBoxModel_move1 = new DefaultComboBoxModel<>();
        JComboBox<String> move1Dropdown = new JComboBox<>(comboBoxModel_move1);
        move1Dropdown.setPreferredSize(new Dimension(138, 25));
-       panelLayout.putConstraint(SpringLayout.NORTH, move1Dropdown, 28, SpringLayout.SOUTH, speciesDropdown);
+       panelLayout.putConstraint(SpringLayout.NORTH, move1Dropdown, 21, SpringLayout.SOUTH, speciesDropdown);
        panelLayout.putConstraint(SpringLayout.EAST, move1Dropdown, 0, SpringLayout.EAST, panel);
        panel.add(move1Dropdown);
 
        DefaultComboBoxModel<String> comboBoxModel_move2 = new DefaultComboBoxModel<>();
        JComboBox<String> move2Dropdown = new JComboBox<>(comboBoxModel_move2);
        move2Dropdown.setPreferredSize(new Dimension(138, 25));
-       panelLayout.putConstraint(SpringLayout.NORTH, move2Dropdown, 0, SpringLayout.SOUTH, move1Dropdown);
+       panelLayout.putConstraint(SpringLayout.NORTH, move2Dropdown, 7, SpringLayout.SOUTH, move1Dropdown);
        panelLayout.putConstraint(SpringLayout.EAST, move2Dropdown, 0, SpringLayout.EAST, move1Dropdown);
        panel.add(move2Dropdown);
 
@@ -227,24 +227,29 @@ public class StartingWindow {
        DefaultComboBoxModel<String> comboBoxModel_move3 = new DefaultComboBoxModel<>();
        JComboBox<String> move3Dropdown = new JComboBox<>(comboBoxModel_move3);
        move3Dropdown.setPreferredSize(new Dimension(138, 25));
-       panelLayout.putConstraint(SpringLayout.NORTH, move3Dropdown, 0, SpringLayout.SOUTH, move2Dropdown);
+       panelLayout.putConstraint(SpringLayout.NORTH, move3Dropdown, 7, SpringLayout.SOUTH, move2Dropdown);
        panelLayout.putConstraint(SpringLayout.EAST, move3Dropdown, 0, SpringLayout.EAST, move2Dropdown);
        panel.add(move3Dropdown);
 
        DefaultComboBoxModel<String> comboBoxModel_move4 = new DefaultComboBoxModel<>();
        JComboBox<String> move4Dropdown = new JComboBox<>(comboBoxModel_move3);
        move4Dropdown.setPreferredSize(new Dimension(138, 25));
-       panelLayout.putConstraint(SpringLayout.NORTH, move4Dropdown, 0, SpringLayout.SOUTH, move3Dropdown);
+       panelLayout.putConstraint(SpringLayout.NORTH, move4Dropdown, 7, SpringLayout.SOUTH, move3Dropdown);
        panelLayout.putConstraint(SpringLayout.EAST, move4Dropdown, 0, SpringLayout.EAST, move3Dropdown);
        panel.add(move4Dropdown);
 
        JLabel speciesLabel = new JLabel("Species:");
-       panelLayout.putConstraint(SpringLayout.SOUTH, speciesLabel, 0, SpringLayout.NORTH, speciesDropdown);
+       panelLayout.putConstraint(SpringLayout.SOUTH, speciesLabel, -3, SpringLayout.NORTH, speciesDropdown);
        panelLayout.putConstraint(SpringLayout.WEST, speciesLabel, 5, SpringLayout.WEST, speciesDropdown);
        panel.add(speciesLabel);
 
+       JLabel ivLabel = new JLabel("IV");
+       JLabel evLabel = new JLabel("EV");
+       panel.add(ivLabel);
+       panel.add(evLabel);
+
        JLabel moveLabel = new JLabel("Moves:");
-       panelLayout.putConstraint(SpringLayout.SOUTH, moveLabel, 0, SpringLayout.NORTH, move1Dropdown);
+       panelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, moveLabel, 0, SpringLayout.VERTICAL_CENTER, evLabel);
        panelLayout.putConstraint(SpringLayout.WEST, moveLabel, 5, SpringLayout.WEST, move1Dropdown);
        panel.add(moveLabel);
 
@@ -272,7 +277,7 @@ public class StartingWindow {
 
 
        panelLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, atk_iv_input,  -70, SpringLayout.HORIZONTAL_CENTER, panel);
-       panelLayout.putConstraint(SpringLayout.NORTH, atk_iv_input,  50, SpringLayout.NORTH, panel);
+       panelLayout.putConstraint(SpringLayout.NORTH, atk_iv_input,  55, SpringLayout.NORTH, panel);
        panelLayout.putConstraint(SpringLayout.WEST, def_iv_input,  0, SpringLayout.WEST, atk_iv_input);
        panelLayout.putConstraint(SpringLayout.WEST, spe_iv_input,  0, SpringLayout.WEST, atk_iv_input);
        panelLayout.putConstraint(SpringLayout.WEST, spd_iv_input,  0, SpringLayout.WEST, atk_iv_input);
@@ -342,10 +347,6 @@ public class StartingWindow {
        panelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, spd_ev_input,  0, SpringLayout.VERTICAL_CENTER, spd_iv_input);
        panelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, hp_ev_input,  0, SpringLayout.VERTICAL_CENTER, hp_iv_input);
 
-       JLabel ivLabel = new JLabel("IV");
-       JLabel evLabel = new JLabel("EV");
-       panel.add(ivLabel);
-       panel.add(evLabel);
 //
        panelLayout.putConstraint(SpringLayout.SOUTH, ivLabel, 0, SpringLayout.NORTH, atk_iv_input);
        panelLayout.putConstraint(SpringLayout.SOUTH, evLabel, 0, SpringLayout.NORTH, atk_ev_input);
@@ -364,12 +365,6 @@ public class StartingWindow {
        panel.add(spdStat);
        panel.add(hpStat);
 
-       panelLayout.putConstraint(SpringLayout.WEST, atkStat,  15, SpringLayout.EAST, atk_ev_input);
-       panelLayout.putConstraint(SpringLayout.WEST, defStat,  15, SpringLayout.EAST, atk_ev_input);
-       panelLayout.putConstraint(SpringLayout.WEST, speStat,  15, SpringLayout.EAST, atk_ev_input);
-       panelLayout.putConstraint(SpringLayout.WEST, spdStat,  15, SpringLayout.EAST, atk_ev_input);
-       panelLayout.putConstraint(SpringLayout.WEST, hpStat,  15, SpringLayout.EAST, atk_ev_input);
-
        panelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, atkStat,  0, SpringLayout.VERTICAL_CENTER, atk_ev_input);
        panelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, defStat,  0, SpringLayout.VERTICAL_CENTER, def_ev_input);
        panelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, speStat,  0, SpringLayout.VERTICAL_CENTER, spe_ev_input);
@@ -379,7 +374,43 @@ public class StartingWindow {
        JLabel statsLabel = new JLabel("Stats");
        panel.add(statsLabel);
        panelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, statsLabel, 0, SpringLayout.VERTICAL_CENTER, evLabel);
-       panelLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, statsLabel, 0, SpringLayout.HORIZONTAL_CENTER, atkStat);
+       panelLayout.putConstraint(SpringLayout.WEST, statsLabel, 8, SpringLayout.EAST, atk_ev_input);
+
+       panelLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, atkStat,  0, SpringLayout.HORIZONTAL_CENTER, statsLabel);
+       panelLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, defStat,  0, SpringLayout.HORIZONTAL_CENTER, statsLabel);
+       panelLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, speStat,  0, SpringLayout.HORIZONTAL_CENTER, statsLabel);
+       panelLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, spdStat,  0, SpringLayout.HORIZONTAL_CENTER, statsLabel);
+       panelLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, hpStat,  0, SpringLayout.HORIZONTAL_CENTER, statsLabel);
+
+       DefaultListModel<String> model = new DefaultListModel<>();
+       JList<String> itemList = new JList<>( model );
+       itemList.setSelectionMode(SINGLE_SELECTION);
+       itemList.setLayoutOrientation(JList.VERTICAL);
+
+       JScrollPane scroller = new JScrollPane(itemList, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+       scroller.setPreferredSize(new Dimension(100,80));
+       panel.add(scroller);
+
+       DefaultComboBoxModel<String> comboBoxModel = new DefaultComboBoxModel<>();
+       JComboBox<String> dropdownItemList = new JComboBox<>(comboBoxModel);
+       dropdownItemList.setPreferredSize(new Dimension(138, 25));
+
+       panelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, scroller, 0, SpringLayout.VERTICAL_CENTER, panel);
+       panelLayout.putConstraint(SpringLayout.WEST, scroller, 10, SpringLayout.WEST, panel);
+
+       JButton addButton = new JButton("+");
+       panel.add(addButton);
+       addButton.setPreferredSize(new Dimension(40, 23));
+       addButton.setToolTipText("Add a new item");
+       panelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, addButton, -12, SpringLayout.VERTICAL_CENTER, scroller);
+       panelLayout.putConstraint(SpringLayout.WEST, addButton, 0, SpringLayout.EAST, scroller);
+
+       JButton removeButton = new JButton("-");
+       panel.add(removeButton);
+       removeButton.setPreferredSize(new Dimension(40, 23));
+       removeButton.setToolTipText("Remove the highlighted item");
+       panelLayout.putConstraint(SpringLayout.NORTH, removeButton, 5, SpringLayout.SOUTH, addButton);
+       panelLayout.putConstraint(SpringLayout.WEST, removeButton, 0, SpringLayout.EAST, scroller);
 
    }
 
@@ -403,7 +434,7 @@ public class StartingWindow {
         itemEditorPanel = panel;
         SpringLayout panelLayout = new SpringLayout();
         panel.setLayout(panelLayout);
-        panel.setPreferredSize(new Dimension(420,140));
+        panel.setPreferredSize(new Dimension(512,140));
         Border raisedEtched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
         raisedEtched = BorderFactory.createTitledBorder(raisedEtched, "Item Editor");
         panel.setBorder(raisedEtched);
@@ -455,7 +486,7 @@ public class StartingWindow {
         }
 
         panel.add(dropdownItemList);
-        panelLayout.putConstraint(SpringLayout.EAST, dropdownItemList, 0, SpringLayout.EAST, panel);
+        panelLayout.putConstraint(SpringLayout.EAST, dropdownItemList, -100, SpringLayout.EAST, panel);
         panelLayout.putConstraint(SpringLayout.NORTH, dropdownItemList, 0, SpringLayout.NORTH, panel);
 
         JLabel amountLabel = new JLabel("Amount:");
@@ -855,7 +886,7 @@ public class StartingWindow {
     private static void createAndShowGUI() {
         JFrame frame = new JFrame("Yet Another RBY Editor");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setPreferredSize(new Dimension(600,430));
+        frame.setPreferredSize(new Dimension(686,430));
 
         contentPane = frame.getContentPane();
         layout = new SpringLayout();
