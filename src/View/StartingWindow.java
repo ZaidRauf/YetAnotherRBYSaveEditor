@@ -193,7 +193,7 @@ public class StartingWindow {
        pokeEditorPanel = panel;
        SpringLayout panelLayout = new SpringLayout();
        panel.setLayout(panelLayout);
-       panel.setPreferredSize(new Dimension(330,210));
+       panel.setPreferredSize(new Dimension(420,210));
        Border raisedEtched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
        raisedEtched = BorderFactory.createTitledBorder(raisedEtched, "PokéEditor");
        panel.setBorder(raisedEtched);
@@ -201,6 +201,186 @@ public class StartingWindow {
 
        layout.putConstraint(SpringLayout.WEST, panel, 5, SpringLayout.EAST, badgesPanel);
        layout.putConstraint(SpringLayout.NORTH, panel, 0, SpringLayout.NORTH, badgesPanel);
+
+       DefaultComboBoxModel<String> comboBoxModel_species = new DefaultComboBoxModel<>();
+       JComboBox<String> speciesDropdown = new JComboBox<>(comboBoxModel_species);
+       speciesDropdown.setPreferredSize(new Dimension(138, 25));
+       panelLayout.putConstraint(SpringLayout.NORTH, speciesDropdown, 20, SpringLayout.NORTH, panel);
+       panelLayout.putConstraint(SpringLayout.EAST, speciesDropdown, 0, SpringLayout.EAST, panel);
+       panel.add(speciesDropdown);
+
+       DefaultComboBoxModel<String> comboBoxModel_move1 = new DefaultComboBoxModel<>();
+       JComboBox<String> move1Dropdown = new JComboBox<>(comboBoxModel_move1);
+       move1Dropdown.setPreferredSize(new Dimension(138, 25));
+       panelLayout.putConstraint(SpringLayout.NORTH, move1Dropdown, 28, SpringLayout.SOUTH, speciesDropdown);
+       panelLayout.putConstraint(SpringLayout.EAST, move1Dropdown, 0, SpringLayout.EAST, panel);
+       panel.add(move1Dropdown);
+
+       DefaultComboBoxModel<String> comboBoxModel_move2 = new DefaultComboBoxModel<>();
+       JComboBox<String> move2Dropdown = new JComboBox<>(comboBoxModel_move2);
+       move2Dropdown.setPreferredSize(new Dimension(138, 25));
+       panelLayout.putConstraint(SpringLayout.NORTH, move2Dropdown, 0, SpringLayout.SOUTH, move1Dropdown);
+       panelLayout.putConstraint(SpringLayout.EAST, move2Dropdown, 0, SpringLayout.EAST, move1Dropdown);
+       panel.add(move2Dropdown);
+
+
+       DefaultComboBoxModel<String> comboBoxModel_move3 = new DefaultComboBoxModel<>();
+       JComboBox<String> move3Dropdown = new JComboBox<>(comboBoxModel_move3);
+       move3Dropdown.setPreferredSize(new Dimension(138, 25));
+       panelLayout.putConstraint(SpringLayout.NORTH, move3Dropdown, 0, SpringLayout.SOUTH, move2Dropdown);
+       panelLayout.putConstraint(SpringLayout.EAST, move3Dropdown, 0, SpringLayout.EAST, move2Dropdown);
+       panel.add(move3Dropdown);
+
+       DefaultComboBoxModel<String> comboBoxModel_move4 = new DefaultComboBoxModel<>();
+       JComboBox<String> move4Dropdown = new JComboBox<>(comboBoxModel_move3);
+       move4Dropdown.setPreferredSize(new Dimension(138, 25));
+       panelLayout.putConstraint(SpringLayout.NORTH, move4Dropdown, 0, SpringLayout.SOUTH, move3Dropdown);
+       panelLayout.putConstraint(SpringLayout.EAST, move4Dropdown, 0, SpringLayout.EAST, move3Dropdown);
+       panel.add(move4Dropdown);
+
+       JLabel speciesLabel = new JLabel("Species:");
+       panelLayout.putConstraint(SpringLayout.SOUTH, speciesLabel, 0, SpringLayout.NORTH, speciesDropdown);
+       panelLayout.putConstraint(SpringLayout.WEST, speciesLabel, 5, SpringLayout.WEST, speciesDropdown);
+       panel.add(speciesLabel);
+
+       JLabel moveLabel = new JLabel("Moves:");
+       panelLayout.putConstraint(SpringLayout.SOUTH, moveLabel, 0, SpringLayout.NORTH, move1Dropdown);
+       panelLayout.putConstraint(SpringLayout.WEST, moveLabel, 5, SpringLayout.WEST, move1Dropdown);
+       panel.add(moveLabel);
+
+       JTextField atk_iv_input = new JTextField();
+       atk_iv_input.setColumns(2);
+       panel.add(atk_iv_input);
+
+       JTextField def_iv_input = new JTextField();
+       def_iv_input.setColumns(2);
+       panel.add(def_iv_input);
+
+       JTextField spd_iv_input = new JTextField();
+       spd_iv_input.setColumns(2);
+       panel.add(spd_iv_input);
+
+       JTextField spe_iv_input = new JTextField();
+       spe_iv_input.setColumns(2);
+       panel.add(spe_iv_input);
+
+       JTextField hp_iv_input = new JTextField();
+       hp_iv_input.setColumns(2);
+       hp_iv_input.setEditable(false);
+       hp_iv_input.setBackground(Color.LIGHT_GRAY);
+       panel.add(hp_iv_input);
+
+
+       panelLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, atk_iv_input,  -70, SpringLayout.HORIZONTAL_CENTER, panel);
+       panelLayout.putConstraint(SpringLayout.NORTH, atk_iv_input,  50, SpringLayout.NORTH, panel);
+       panelLayout.putConstraint(SpringLayout.WEST, def_iv_input,  0, SpringLayout.WEST, atk_iv_input);
+       panelLayout.putConstraint(SpringLayout.WEST, spe_iv_input,  0, SpringLayout.WEST, atk_iv_input);
+       panelLayout.putConstraint(SpringLayout.WEST, spd_iv_input,  0, SpringLayout.WEST, atk_iv_input);
+       panelLayout.putConstraint(SpringLayout.WEST, hp_iv_input,  0, SpringLayout.WEST, atk_iv_input);
+
+       panelLayout.putConstraint(SpringLayout.NORTH, def_iv_input,  0, SpringLayout.SOUTH, atk_iv_input);
+       panelLayout.putConstraint(SpringLayout.NORTH, spe_iv_input,  0, SpringLayout.SOUTH, def_iv_input);
+       panelLayout.putConstraint(SpringLayout.NORTH, spd_iv_input,  0, SpringLayout.SOUTH, spe_iv_input);
+       panelLayout.putConstraint(SpringLayout.NORTH, hp_iv_input,  0, SpringLayout.SOUTH, spd_iv_input);
+
+       JLabel atkLabel = new JLabel("Atk:");
+       JLabel defLabel = new JLabel("Def:");
+       JLabel speLabel = new JLabel("Spe:");
+       JLabel spdLabel = new JLabel("Spd:");
+       JLabel hpLabel = new JLabel("HP:");
+
+       panel.add(atkLabel);
+       panel.add(defLabel);
+       panel.add(speLabel);
+       panel.add(spdLabel);
+       panel.add(hpLabel);
+
+
+       panelLayout.putConstraint(SpringLayout.EAST, atkLabel,  -4, SpringLayout.WEST, atk_iv_input);
+       panelLayout.putConstraint(SpringLayout.WEST, defLabel,  0, SpringLayout.WEST, atkLabel);
+       panelLayout.putConstraint(SpringLayout.WEST, speLabel,  0, SpringLayout.WEST, atkLabel);
+       panelLayout.putConstraint(SpringLayout.WEST, spdLabel,  0, SpringLayout.WEST, atkLabel);
+       panelLayout.putConstraint(SpringLayout.WEST, hpLabel,  0, SpringLayout.WEST, atkLabel);
+
+
+       panelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, atkLabel,  0, SpringLayout.VERTICAL_CENTER, atk_iv_input);
+       panelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, defLabel,  0, SpringLayout.VERTICAL_CENTER, def_iv_input);
+       panelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, speLabel,  0, SpringLayout.VERTICAL_CENTER, spe_iv_input);
+       panelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, spdLabel,  0, SpringLayout.VERTICAL_CENTER, spd_iv_input);
+       panelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, hpLabel,  0, SpringLayout.VERTICAL_CENTER, hp_iv_input);
+
+       JTextField atk_ev_input = new JTextField();
+       atk_ev_input.setColumns(4);
+       panel.add(atk_ev_input);
+
+       JTextField def_ev_input = new JTextField();
+       def_ev_input.setColumns(4);
+       panel.add(def_ev_input);
+
+       JTextField spe_ev_input = new JTextField();
+       spe_ev_input.setColumns(4);
+       panel.add(spe_ev_input);
+
+       JTextField spd_ev_input = new JTextField();
+       spd_ev_input.setColumns(4);
+       panel.add(spd_ev_input);
+
+       JTextField hp_ev_input = new JTextField();
+       hp_ev_input.setColumns(4);
+       panel.add(hp_ev_input);
+
+       panelLayout.putConstraint(SpringLayout.WEST, atk_ev_input,  0, SpringLayout.EAST, atk_iv_input);
+
+       panelLayout.putConstraint(SpringLayout.EAST, def_ev_input,  0, SpringLayout.EAST, atk_ev_input);
+       panelLayout.putConstraint(SpringLayout.EAST, spe_ev_input,  0, SpringLayout.EAST, atk_ev_input);
+       panelLayout.putConstraint(SpringLayout.EAST, spd_ev_input,  0, SpringLayout.EAST, atk_ev_input);
+       panelLayout.putConstraint(SpringLayout.EAST, hp_ev_input,  0, SpringLayout.EAST, atk_ev_input);
+
+       panelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, atk_ev_input,  0, SpringLayout.VERTICAL_CENTER, atk_iv_input);
+       panelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, def_ev_input,  0, SpringLayout.VERTICAL_CENTER, def_iv_input);
+       panelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, spe_ev_input,  0, SpringLayout.VERTICAL_CENTER, spe_iv_input);
+       panelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, spd_ev_input,  0, SpringLayout.VERTICAL_CENTER, spd_iv_input);
+       panelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, hp_ev_input,  0, SpringLayout.VERTICAL_CENTER, hp_iv_input);
+
+       JLabel ivLabel = new JLabel("IV");
+       JLabel evLabel = new JLabel("EV");
+       panel.add(ivLabel);
+       panel.add(evLabel);
+//
+       panelLayout.putConstraint(SpringLayout.SOUTH, ivLabel, 0, SpringLayout.NORTH, atk_iv_input);
+       panelLayout.putConstraint(SpringLayout.SOUTH, evLabel, 0, SpringLayout.NORTH, atk_ev_input);
+       panelLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, ivLabel, 0, SpringLayout.HORIZONTAL_CENTER, atk_iv_input);
+       panelLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, evLabel, 0, SpringLayout.HORIZONTAL_CENTER, atk_ev_input);
+
+       JLabel atkStat = new JLabel("0");
+       JLabel defStat = new JLabel("0");
+       JLabel speStat = new JLabel("0");
+       JLabel spdStat = new JLabel("0");
+       JLabel hpStat = new JLabel("0");
+
+       panel.add(atkStat);
+       panel.add(defStat);
+       panel.add(speStat);
+       panel.add(spdStat);
+       panel.add(hpStat);
+
+       panelLayout.putConstraint(SpringLayout.WEST, atkStat,  15, SpringLayout.EAST, atk_ev_input);
+       panelLayout.putConstraint(SpringLayout.WEST, defStat,  15, SpringLayout.EAST, atk_ev_input);
+       panelLayout.putConstraint(SpringLayout.WEST, speStat,  15, SpringLayout.EAST, atk_ev_input);
+       panelLayout.putConstraint(SpringLayout.WEST, spdStat,  15, SpringLayout.EAST, atk_ev_input);
+       panelLayout.putConstraint(SpringLayout.WEST, hpStat,  15, SpringLayout.EAST, atk_ev_input);
+
+       panelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, atkStat,  0, SpringLayout.VERTICAL_CENTER, atk_ev_input);
+       panelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, defStat,  0, SpringLayout.VERTICAL_CENTER, def_ev_input);
+       panelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, speStat,  0, SpringLayout.VERTICAL_CENTER, spe_ev_input);
+       panelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, spdStat,  0, SpringLayout.VERTICAL_CENTER, spd_ev_input);
+       panelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, hpStat,  0, SpringLayout.VERTICAL_CENTER, hp_ev_input);
+
+       JLabel statsLabel = new JLabel("Stats");
+       panel.add(statsLabel);
+       panelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, statsLabel, 0, SpringLayout.VERTICAL_CENTER, evLabel);
+       panelLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, statsLabel, 0, SpringLayout.HORIZONTAL_CENTER, atkStat);
+
    }
 
     private static void pokemonBrowserPanel(){
@@ -223,7 +403,7 @@ public class StartingWindow {
         itemEditorPanel = panel;
         SpringLayout panelLayout = new SpringLayout();
         panel.setLayout(panelLayout);
-        panel.setPreferredSize(new Dimension(330,140));
+        panel.setPreferredSize(new Dimension(420,140));
         Border raisedEtched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
         raisedEtched = BorderFactory.createTitledBorder(raisedEtched, "Item Editor");
         panel.setBorder(raisedEtched);
@@ -235,7 +415,7 @@ public class StartingWindow {
         itemList.setLayoutOrientation(JList.VERTICAL);
 
         JScrollPane scroller = new JScrollPane(itemList, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scroller.setPreferredSize(new Dimension(90,80));
+        scroller.setPreferredSize(new Dimension(100,80));
         panel.add(scroller);
         itemModel = model;
 
@@ -675,7 +855,7 @@ public class StartingWindow {
     private static void createAndShowGUI() {
         JFrame frame = new JFrame("Yet Another RBY Editor");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setPreferredSize(new Dimension(515,430));
+        frame.setPreferredSize(new Dimension(600,430));
 
         contentPane = frame.getContentPane();
         layout = new SpringLayout();
