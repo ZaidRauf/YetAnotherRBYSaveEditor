@@ -34,6 +34,8 @@ public class Main {
 
         SaveReader.readBagItemList();
 
+        PokemonUtilities.readPartyPokemon(SaveReader.getSaveGameData(), 0x2F34);
+
 ////
 ////        byte checksumTest = ChecksumUtilities.generateValidChecksum(fileInput.getSaveFileData(), ChecksumUtilities.MAIN_DATA_START, ChecksumUtilities.MAIN_DATA_END);
 ////

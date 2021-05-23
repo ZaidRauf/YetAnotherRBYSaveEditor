@@ -276,7 +276,7 @@ public class StartingWindow {
        panel.add(hp_iv_input);
 
 
-       panelLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, atk_iv_input,  -70, SpringLayout.HORIZONTAL_CENTER, panel);
+       panelLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, atk_iv_input,  -30, SpringLayout.HORIZONTAL_CENTER, panel);
        panelLayout.putConstraint(SpringLayout.NORTH, atk_iv_input,  55, SpringLayout.NORTH, panel);
        panelLayout.putConstraint(SpringLayout.WEST, def_iv_input,  0, SpringLayout.WEST, atk_iv_input);
        panelLayout.putConstraint(SpringLayout.WEST, spe_iv_input,  0, SpringLayout.WEST, atk_iv_input);
@@ -374,7 +374,7 @@ public class StartingWindow {
        JLabel statsLabel = new JLabel("Stats");
        panel.add(statsLabel);
        panelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, statsLabel, 0, SpringLayout.VERTICAL_CENTER, evLabel);
-       panelLayout.putConstraint(SpringLayout.WEST, statsLabel, 8, SpringLayout.EAST, atk_ev_input);
+       panelLayout.putConstraint(SpringLayout.WEST, statsLabel, 6, SpringLayout.EAST, atk_ev_input);
 
        panelLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, atkStat,  0, SpringLayout.HORIZONTAL_CENTER, statsLabel);
        panelLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, defStat,  0, SpringLayout.HORIZONTAL_CENTER, statsLabel);
@@ -388,7 +388,7 @@ public class StartingWindow {
        itemList.setLayoutOrientation(JList.VERTICAL);
 
        JScrollPane scroller = new JScrollPane(itemList, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-       scroller.setPreferredSize(new Dimension(100,80));
+       scroller.setPreferredSize(new Dimension(100,110));
        panel.add(scroller);
 
        DefaultComboBoxModel<String> comboBoxModel = new DefaultComboBoxModel<>();
@@ -412,22 +412,23 @@ public class StartingWindow {
        panelLayout.putConstraint(SpringLayout.NORTH, removeButton, 5, SpringLayout.SOUTH, addButton);
        panelLayout.putConstraint(SpringLayout.WEST, removeButton, 0, SpringLayout.EAST, scroller);
 
+
+       JLabel partyLabel = new JLabel("Party 0/6");
+       panelLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, partyLabel, 0, SpringLayout.HORIZONTAL_CENTER, scroller);
+       panelLayout.putConstraint(SpringLayout.SOUTH, partyLabel, 0, SpringLayout.NORTH, scroller);
+       panel.add(partyLabel);
+
+       JLabel nickNameLabel = new JLabel("Name: ");
+       panelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, nickNameLabel, -12, SpringLayout.VERTICAL_CENTER, speciesDropdown);
+       panelLayout.putConstraint(SpringLayout.WEST, nickNameLabel, 0, SpringLayout.WEST, atkLabel);
+       panel.add(nickNameLabel);
+
+       JTextField nicknameInput = new JTextField(9);
+       panelLayout.putConstraint(SpringLayout.WEST, nicknameInput, 0, SpringLayout.EAST, nickNameLabel);
+       panelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, nicknameInput, 0, SpringLayout.VERTICAL_CENTER, nickNameLabel);
+       panel.add(nicknameInput);
+
    }
-
-    private static void pokemonBrowserPanel(){
-        JPanel panel = new JPanel();
-        browserPanel = panel;
-        SpringLayout panelLayout = new SpringLayout();
-        panel.setLayout(panelLayout);
-        panel.setPreferredSize(new Dimension(255,75));
-        Border raisedEtched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
-        raisedEtched = BorderFactory.createTitledBorder(raisedEtched, "PokéBrowser");
-        panel.setBorder(raisedEtched);
-        contentPane.add(panel);
-
-        layout.putConstraint(SpringLayout.WEST, panel, 5, SpringLayout.EAST, badgesPanel);
-        layout.putConstraint(SpringLayout.NORTH, panel, 5, SpringLayout.SOUTH, itemEditorPanel);
-    }
 
     private static void itemEditorPanel(){
         JPanel panel = new JPanel();
@@ -486,13 +487,13 @@ public class StartingWindow {
         }
 
         panel.add(dropdownItemList);
-        panelLayout.putConstraint(SpringLayout.EAST, dropdownItemList, -100, SpringLayout.EAST, panel);
-        panelLayout.putConstraint(SpringLayout.NORTH, dropdownItemList, 0, SpringLayout.NORTH, panel);
+        panelLayout.putConstraint(SpringLayout.EAST, dropdownItemList, -162, SpringLayout.EAST, panel);
+        panelLayout.putConstraint(SpringLayout.NORTH, dropdownItemList, 23, SpringLayout.NORTH, panel);
 
         JLabel amountLabel = new JLabel("Amount:");
         panel.add(amountLabel);
-        panelLayout.putConstraint(SpringLayout.NORTH, amountLabel, 10, SpringLayout.SOUTH, itemLabel);
-        panelLayout.putConstraint(SpringLayout.WEST, amountLabel, 0, SpringLayout.WEST, itemLabel);
+        panelLayout.putConstraint(SpringLayout.VERTICAL_CENTER, amountLabel, 0, SpringLayout.VERTICAL_CENTER, itemLabel);
+        panelLayout.putConstraint(SpringLayout.WEST, amountLabel, 27, SpringLayout.EAST, dropdownItemList);
 
         NumberFormatter amountFormat = new NumberFormatter(NumberFormat.getIntegerInstance());
         amountFormat.setMinimum(1);
@@ -533,8 +534,8 @@ public class StartingWindow {
 
         JLabel countLabel = new JLabel("Capacity: 0/20");
         panel.add(countLabel);
-        panelLayout.putConstraint(SpringLayout.NORTH, countLabel, 10, SpringLayout.SOUTH, amountLabel);
-        panelLayout.putConstraint(SpringLayout.WEST, countLabel, 0, SpringLayout.WEST, itemLabel);
+        panelLayout.putConstraint(SpringLayout.NORTH, countLabel, 25, SpringLayout.SOUTH, amountLabel);
+        panelLayout.putConstraint(SpringLayout.WEST, countLabel, 0, SpringLayout.WEST, amountLabel);
         itemCounter = countLabel;
 
         JButton addButton = new JButton("+");
@@ -647,7 +648,7 @@ public class StartingWindow {
 
 
         JLabel inventoryLabel = new JLabel("Inventory: ");
-        panelLayout.putConstraint(SpringLayout.NORTH, inventoryLabel, 10, SpringLayout.SOUTH, countLabel);
+        panelLayout.putConstraint(SpringLayout.NORTH, inventoryLabel, 25, SpringLayout.SOUTH, itemLabel);
         panelLayout.putConstraint(SpringLayout.WEST, inventoryLabel, 0, SpringLayout.WEST, itemLabel);
         panel.add(inventoryLabel);
 
